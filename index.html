@@ -27,24 +27,254 @@
     }
     h1, h2, h3, .serif { font-family: 'Playfair Display', Georgia, serif; }
 
-    /* ── Music button ── */
-    #music-btn {
+    /* ── Floating Music Trigger Button ── */
+    #music-trigger {
       position: fixed;
-      bottom: 1.25rem; right: 1.25rem;
-      z-index: 100;
-      background: white;
-      border: 2px solid var(--rose);
+      bottom: 1.4rem;
+      right: 1.4rem;
+      z-index: 90;
+      width: 52px;
+      height: 52px;
       border-radius: 9999px;
-      padding: .5rem 1rem;
-      display: flex; align-items: center; gap: .4rem;
-      font-size: .7rem;
-      font-family: 'Montserrat', sans-serif;
-      color: var(--deep);
+      background: linear-gradient(135deg, var(--rose), var(--deep));
+      border: none;
       cursor: pointer;
-      box-shadow: 0 4px 20px rgba(200,100,120,.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(124,77,110,.35);
       transition: transform .2s, box-shadow .2s;
     }
-    #music-btn:hover { transform: scale(1.05); box-shadow: 0 6px 24px rgba(200,100,120,.25); }
+    #music-trigger:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 28px rgba(124,77,110,.45);
+    }
+    #music-trigger .vinyl {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: conic-gradient(
+        #fff0f5 0deg 45deg,
+        #f4a7b9 45deg 90deg,
+        #fff0f5 90deg 135deg,
+        #e8d5f5 135deg 180deg,
+        #fff0f5 180deg 225deg,
+        #f4a7b9 225deg 270deg,
+        #fff0f5 270deg 315deg,
+        #e8d5f5 315deg 360deg
+      );
+      position: relative;
+      transition: transform .1s;
+    }
+    #music-trigger.playing .vinyl {
+      animation: spin-vinyl 3s linear infinite;
+    }
+    @keyframes spin-vinyl {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    #music-trigger .vinyl::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 0 0 2px rgba(124,77,110,.25);
+    }
+    /* Pulse ring when playing */
+    #music-trigger.playing::before {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 2px solid var(--rose);
+      animation: pulse-ring 1.8s ease-out infinite;
+    }
+    @keyframes pulse-ring {
+      0%   { opacity: .7; transform: scale(1); }
+      100% { opacity: 0;  transform: scale(1.45); }
+    }
+
+    /* ── Music Player Card ── */
+    #player-card {
+      position: fixed;
+      bottom: 5.2rem;
+      right: 1.4rem;
+      z-index: 91;
+      width: min(310px, calc(100vw - 2rem));
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 16px 60px rgba(124,77,110,.22), 0 4px 16px rgba(124,77,110,.1);
+      border: 1px solid rgba(244,167,185,.3);
+      transform: translateY(20px) scale(.95);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform .38s cubic-bezier(.34,1.28,.64,1), opacity .3s ease;
+    }
+    #player-card.open {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* Album art */
+    #player-art-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      overflow: hidden;
+    }
+    #player-art-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* Gradient scrim on art */
+    #player-art-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,.0) 55%,
+        rgba(30,10,20,.55) 100%
+      );
+    }
+    /* Close button */
+    #player-close {
+      position: absolute;
+      top: .7rem; right: .7rem;
+      z-index: 2;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.25);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,.4);
+      color: white;
+      font-size: .8rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s, transform .2s;
+    }
+    #player-close:hover { background: rgba(255,255,255,.4); transform: scale(1.1); }
+
+    /* Equaliser bars (visible while playing) */
+    #player-eq {
+      position: absolute;
+      bottom: .8rem; left: .9rem;
+      z-index: 2;
+      display: flex; align-items: flex-end; gap: 2.5px;
+      height: 18px;
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    #player-eq.active { opacity: 1; }
+    #player-eq span {
+      width: 3px;
+      border-radius: 2px;
+      background: rgba(255,255,255,.85);
+      animation: eq-bar 0s ease-in-out infinite alternate;
+    }
+    #player-eq span:nth-child(1) { animation-duration: .55s; }
+    #player-eq span:nth-child(2) { animation-duration: .40s; }
+    #player-eq span:nth-child(3) { animation-duration: .65s; }
+    #player-eq span:nth-child(4) { animation-duration: .45s; }
+    #player-eq.active span { animation-name: eq-bar; }
+    @keyframes eq-bar {
+      from { height: 4px; }
+      to   { height: 16px; }
+    }
+
+    /* Body of the card */
+    #player-body {
+      padding: .95rem 1.1rem 1.1rem;
+      background: white;
+    }
+
+    /* Song meta */
+    .player-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--deep);
+      line-height: 1.3;
+    }
+    .player-artist {
+      font-size: .67rem;
+      color: var(--gold);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-top: .15rem;
+    }
+
+    /* Progress bar */
+    .progress-wrap {
+      margin-top: .85rem;
+      position: relative;
+    }
+    .progress-track {
+      width: 100%;
+      height: 3px;
+      background: #f0e0e8;
+      border-radius: 9999px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 9999px;
+      background: linear-gradient(90deg, var(--rose), var(--deep));
+      width: 0%;
+      transition: width .5s linear;
+    }
+    .progress-times {
+      display: flex;
+      justify-content: space-between;
+      margin-top: .3rem;
+      font-size: .6rem;
+      color: #c4a0b0;
+      letter-spacing: .03em;
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: .9rem;
+      padding: 0 .1rem;
+    }
+    .ctrl-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--deep);
+      font-size: .9rem;
+      transition: background .18s, transform .18s;
+    }
+    .ctrl-btn:hover { background: #fde8ed; transform: scale(1.1); }
+    .ctrl-btn.active-toggle { color: var(--rose); }
+
+    .play-btn {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, var(--rose), var(--deep));
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 18px rgba(124,77,110,.3);
+      transition: transform .18s, box-shadow .18s;
+    }
+    .play-btn:hover { transform: scale(1.08); box-shadow: 0 6px 24px rgba(124,77,110,.4); }
+    .play-btn:active { transform: scale(.96); }
 
     /* ── Steps ── */
     .step {
@@ -146,7 +376,6 @@
       font-size: .65rem; color: #bbb;
       border-radius: 1px; overflow: hidden;
     }
-    /* Make sure photos fill the slot */
     .photo-slot img { width:100%; height:100%; object-fit:cover; }
 
     /* ── Promises ── */
@@ -168,8 +397,6 @@
       0%,100% { box-shadow: 0 0 0 0 rgba(244,167,185,.5); }
       60%      { box-shadow: 0 0 0 14px rgba(244,167,185,0); }
     }
-
-    /* btn-no is absolutely positioned INSIDE step-4 */
     #btn-no {
       position: absolute;
       transition: top .25s cubic-bezier(.4,0,.2,1), left .25s cubic-bezier(.4,0,.2,1);
@@ -177,13 +404,11 @@
 
     /* ── Confetti canvas ── */
     #confetti-canvas {
-      position: fixed; 
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none; 
-      z-index: 9999; /* Ditinggikan supaya di atas semua elemen */
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
     }
 
     /* ── Fade up ── */
@@ -231,16 +456,92 @@
 <div id="hearts-layer" aria-hidden="true"></div>
 <canvas id="confetti-canvas" aria-hidden="true"></canvas>
 
-<!-- Music toggle -->
-<button id="music-btn" aria-label="Toggle music" onclick="toggleMusic()">
-  <span id="music-icon">▶</span>
-  <span id="music-label">Play musik 🎵</span>
+<!-- ══════════════════════════════════════
+     FLOATING MUSIC TRIGGER BUTTON
+══════════════════════════════════════ -->
+<button id="music-trigger" aria-label="Open music player" onclick="togglePlayerCard()">
+  <div class="vinyl"></div>
 </button>
 
-<!--
-  🎵 Ganti src di bawah dengan "musik.mp3" kalau file ada di folder yang sama,
-     atau URL langsung ke file MP3 kamu.
--->
+<!-- ══════════════════════════════════════
+     MUSIC PLAYER CARD
+══════════════════════════════════════ -->
+<div id="player-card" role="region" aria-label="Music player">
+
+  <!-- Album art -->
+  <div id="player-art-wrap">
+    <img src="foto2.jpg" alt="Album art" id="player-art" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#fde8ed,#e8d5f5)'"/>
+    <button id="player-close" onclick="closePlayerCard()" aria-label="Tutup player">✕</button>
+    <!-- EQ bars -->
+    <div id="player-eq">
+      <span></span><span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div id="player-body">
+    <!-- Song info -->
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <p class="player-title">Untuk Kamu 🤍</p>
+        <p class="player-artist">Melodi Hatiku</p>
+      </div>
+      <!-- Heart favourite -->
+      <button id="fav-btn" onclick="toggleFav()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--rose);padding:.1rem;" aria-label="Favourite">♡</button>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="progress-wrap">
+      <div class="progress-track" id="progress-track" onclick="seekAudio(event)">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="progress-times">
+        <span id="time-current">00:00</span>
+        <span id="time-total">--:--</span>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <!-- Shuffle -->
+      <button class="ctrl-btn" id="shuffle-btn" onclick="toggleShuffle()" aria-label="Shuffle" title="Shuffle">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 3 21 3 21 8"></polyline>
+          <line x1="4" y1="20" x2="21" y2="3"></line>
+          <polyline points="21 16 21 21 16 21"></polyline>
+          <line x1="15" y1="15" x2="21" y2="21"></line>
+        </svg>
+      </button>
+      <!-- Prev -->
+      <button class="ctrl-btn" onclick="seekPrev()" aria-label="Restart">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/>
+        </svg>
+      </button>
+      <!-- Play / Pause -->
+      <button class="play-btn" id="play-btn" onclick="togglePlay()" aria-label="Play/Pause">
+        <svg id="icon-play" width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+        <svg id="icon-pause" width="20" height="20" viewBox="0 0 24 24" fill="white" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+      </button>
+      <!-- Next -->
+      <button class="ctrl-btn" onclick="seekNext()" aria-label="Forward 10s">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M6 18l8.5-6L6 6v12zm2-8.14 5.02 2.14L8 14.14V9.86zM16 6h2v12h-2z"/>
+        </svg>
+      </button>
+      <!-- Loop -->
+      <button class="ctrl-btn" id="loop-btn" onclick="toggleLoop()" aria-label="Loop" title="Loop">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="17 1 21 5 17 9"></polyline>
+          <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+          <polyline points="7 23 3 19 7 15"></polyline>
+          <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
 <audio id="bg-music" loop>
   <source src="musik.mp3" type="audio/mpeg" />
 </audio>
@@ -276,25 +577,21 @@
       </div>
       <div id="letter-text" class="space-y-4 text-sm md:text-base leading-relaxed" style="color:var(--text)"></div>
 
-      <!-- ── Polaroid photos ── -->
       <div id="polaroid-section" class="hidden mt-8">
         <p class="text-center text-xs uppercase tracking-widest mb-4" style="color:var(--rose)">Momen kita yang indah ✨</p>
         <div class="grid grid-cols-2 gap-4">
-          
           <div class="polaroid flex flex-col items-center">
             <div class="photo-slot w-full h-full overflow-hidden rounded">
               <img src="foto1.jpg" alt="Foto kita 1" class="w-full h-full object-cover">
             </div>
             <p class="text-xs mt-2 serif italic text-center" style="color:var(--deep)">Momen favorit kita ♡</p>
           </div>
-          
           <div class="polaroid flex flex-col items-center">
             <div class="photo-slot w-full h-full overflow-hidden rounded">
               <img src="foto2.jpg" alt="Foto kita 2" class="w-full h-full object-cover">
             </div>
             <p class="text-xs mt-2 serif italic text-center" style="color:var(--deep)">Selalu ada tawa ♡</p>
           </div>
-
         </div>
       </div>
 
@@ -336,10 +633,6 @@
 </section>
 
 <!-- ═══════════════ STEP 4 — DECISION ═══════════════ -->
-<!--
-  step-4 is position:fixed with inset:0.
-  btn-no is position:absolute inside it, so it moves within the viewport correctly.
--->
 <section class="step" id="step-4" style="position:fixed;">
   <div class="text-center space-y-8 px-4 relative" style="z-index:20">
     <div class="fade-up" style="animation-delay:.2s;opacity:0">
@@ -349,8 +642,6 @@
       </h2>
       <p class="text-sm" style="color:var(--gold)">Jawab jujur ya sayang...</p>
     </div>
-
-    <!-- Only "Mau" button in the normal flow -->
     <div class="flex items-center justify-center fade-up" style="animation-delay:.6s;opacity:0">
       <button id="btn-yes" onclick="celebrate()"
         class="px-10 py-4 rounded-full text-white text-base font-semibold"
@@ -358,17 +649,10 @@
         Mau ✨
       </button>
     </div>
-
     <p class="text-xs fade-up" style="color:#cba;animation-delay:1s;opacity:0">
       (Coba klik tombol "Nggak" deh, kalau bisa... 😏)
     </p>
   </div>
-
-  <!--
-    btn-no is absolute inside the fixed step-4.
-    Its initial position is set by JS when the step activates.
-    It moves on every click attempt.
-  -->
   <button id="btn-no"
     onclick="runaway(this)"
     class="px-8 py-3 rounded-full text-sm font-medium border-2"
@@ -390,11 +674,6 @@
       <p class="serif italic text-lg" style="color:var(--rose)">"Kamu adalah rumah yang selalu aku pulang."</p>
     </div>
     <div class="space-y-2">
-      <!--
-        ✏️ Ganti nomor di bawah (628xxx) dengan nomor WA kamu sendiri.
-           Format: 62 + nomor tanpa angka 0 di depan.
-           Contoh: 081234567890 → 6281234567890
-      -->
       <a href="https://wa.me/6285701141981?text=Aku%20udah%20maafin%20kok%2C%20sini%20peluk!%20%F0%9F%A4%97"
         target="_blank" rel="noopener"
         class="inline-block px-8 py-4 rounded-full text-white text-sm font-semibold transition-all duration-300 hover:scale-105 active:scale-95"
@@ -411,8 +690,11 @@
    STATE
 ════════════════════════════════ */
 let currentStep = 1;
-let musicPlaying = false;
 const audio = document.getElementById('bg-music');
+let playerCardOpen = false;
+let favActive = false;
+let shuffleActive = false;
+let loopActive = true; // default loop on
 
 /* ════════════════════════════════
    STEP TRANSITION
@@ -432,35 +714,133 @@ function goToStep(n) {
 }
 
 /* ════════════════════════════════
-   MUSIC
-════════════════════════════════ */
-function toggleMusic() {
-  if (musicPlaying) {
-    audio.pause();
-    document.getElementById('music-icon').textContent = '▶';
-    document.getElementById('music-label').textContent = 'Play musik 🎵';
-  } else {
-    audio.play().catch(() => {});
-    document.getElementById('music-icon').textContent = '⏸';
-    document.getElementById('music-label').textContent = 'Pause musik';
-  }
-  musicPlaying = !musicPlaying;
-}
-
-/* ════════════════════════════════
    STEP 1 — ENVELOPE
 ════════════════════════════════ */
 function openEnvelope() {
   document.getElementById('envelope').classList.add('open');
+  // Play music
   audio.play().catch(() => {});
-  musicPlaying = true;
-  document.getElementById('music-icon').textContent = '⏸';
-  document.getElementById('music-label').textContent = 'Pause musik';
+  setPlayingState(true);
+  // Open player card after short delay
+  setTimeout(() => {
+    openPlayerCard();
+  }, 700);
   setTimeout(() => goToStep(2), 1100);
 }
 document.getElementById('envelope').addEventListener('keydown', e => {
   if (e.key === 'Enter' || e.key === ' ') openEnvelope();
 });
+
+/* ════════════════════════════════
+   MUSIC PLAYER CARD
+════════════════════════════════ */
+function openPlayerCard() {
+  document.getElementById('player-card').classList.add('open');
+  playerCardOpen = true;
+}
+function closePlayerCard() {
+  document.getElementById('player-card').classList.remove('open');
+  playerCardOpen = false;
+}
+function togglePlayerCard() {
+  if (playerCardOpen) closePlayerCard();
+  else openPlayerCard();
+}
+
+/* ════════════════════════════════
+   PLAY / PAUSE SYNC
+════════════════════════════════ */
+function setPlayingState(playing) {
+  const trigger = document.getElementById('music-trigger');
+  const iconPlay = document.getElementById('icon-play');
+  const iconPause = document.getElementById('icon-pause');
+  const eq = document.getElementById('player-eq');
+
+  if (playing) {
+    trigger.classList.add('playing');
+    iconPlay.style.display = 'none';
+    iconPause.style.display = '';
+    eq.classList.add('active');
+  } else {
+    trigger.classList.remove('playing');
+    iconPlay.style.display = '';
+    iconPause.style.display = 'none';
+    eq.classList.remove('active');
+  }
+}
+
+function togglePlay() {
+  if (audio.paused) {
+    audio.play().catch(() => {});
+    setPlayingState(true);
+  } else {
+    audio.pause();
+    setPlayingState(false);
+  }
+}
+
+audio.addEventListener('play',  () => setPlayingState(true));
+audio.addEventListener('pause', () => setPlayingState(false));
+audio.addEventListener('ended', () => setPlayingState(false));
+
+/* ════════════════════════════════
+   PROGRESS BAR
+════════════════════════════════ */
+function formatTime(s) {
+  if (!isFinite(s)) return '--:--';
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+}
+
+audio.addEventListener('timeupdate', () => {
+  const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('time-current').textContent = formatTime(audio.currentTime);
+});
+audio.addEventListener('loadedmetadata', () => {
+  document.getElementById('time-total').textContent = formatTime(audio.duration);
+});
+audio.addEventListener('durationchange', () => {
+  document.getElementById('time-total').textContent = formatTime(audio.duration);
+});
+
+function seekAudio(e) {
+  if (!audio.duration) return;
+  const track = document.getElementById('progress-track');
+  const rect = track.getBoundingClientRect();
+  const ratio = (e.clientX - rect.left) / rect.width;
+  audio.currentTime = Math.max(0, Math.min(1, ratio)) * audio.duration;
+}
+
+/* ════════════════════════════════
+   CONTROLS
+════════════════════════════════ */
+function seekPrev() {
+  audio.currentTime = 0;
+}
+function seekNext() {
+  audio.currentTime = Math.min(audio.currentTime + 10, audio.duration || 0);
+}
+function toggleFav() {
+  favActive = !favActive;
+  document.getElementById('fav-btn').textContent = favActive ? '♥' : '♡';
+  document.getElementById('fav-btn').style.color = favActive ? '#c45c7a' : 'var(--rose)';
+}
+function toggleShuffle() {
+  shuffleActive = !shuffleActive;
+  const btn = document.getElementById('shuffle-btn');
+  btn.classList.toggle('active-toggle', shuffleActive);
+}
+function toggleLoop() {
+  loopActive = !loopActive;
+  audio.loop = loopActive;
+  const btn = document.getElementById('loop-btn');
+  btn.classList.toggle('active-toggle', loopActive);
+}
+// Init loop state
+audio.loop = loopActive;
+document.getElementById('loop-btn').classList.add('active-toggle');
 
 /* ════════════════════════════════
    STEP 2 — TYPEWRITER
@@ -534,27 +914,19 @@ function animatePromises() {
 
 /* ════════════════════════════════
    STEP 4 — RUNAWAY BUTTON
-   • btn-no is position:absolute inside the fixed step-4
-   • initRunaway() places it at a safe starting corner
-   • runaway() moves it to a new random spot on every CLICK
-   • Only one btn-no element exists — no duplicates
 ════════════════════════════════ */
 function initRunaway() {
   const btn = document.getElementById('btn-no');
-  // Place it at bottom-right away from btn-yes (which is centered)
   btn.style.top  = '75%';
   btn.style.left = '65%';
 }
-
 function runaway(btn) {
-  const pad    = 60;
-  const bw     = btn.offsetWidth  || 120;
-  const bh     = btn.offsetHeight || 48;
-  const maxX   = window.innerWidth  - bw - pad;
-  const maxY   = window.innerHeight - bh - pad;
-
+  const pad  = 60;
+  const bw   = btn.offsetWidth  || 120;
+  const bh   = btn.offsetHeight || 48;
+  const maxX = window.innerWidth  - bw - pad;
+  const maxY = window.innerHeight - bh - pad;
   let newX, newY, attempts = 0;
-  // Avoid overlapping with btn-yes (roughly center of screen)
   do {
     newX = pad + Math.random() * maxX;
     newY = pad + Math.random() * maxY;
@@ -564,7 +936,6 @@ function runaway(btn) {
     Math.abs(newX - window.innerWidth  / 2) < 130 &&
     Math.abs(newY - window.innerHeight / 2) < 80
   );
-
   btn.style.left = newX + 'px';
   btn.style.top  = newY + 'px';
 }
@@ -573,27 +944,19 @@ function runaway(btn) {
    STEP 5 — CELEBRATION
 ════════════════════════════════ */
 function celebrate() { goToStep(5); }
-
 function startCelebration() {
   if (typeof confetti === 'undefined') return;
-  
   const colors = ['#F4A7B9','#FADADD','#C9956C','#E8D5F5','#ffffff','#f7cdd9'];
-  
-  // Fungsi ledakan acak kiri & kanan layar
-  const burst = () => confetti({ 
-    particleCount: 80, 
-    spread: 100, 
-    origin: { x: Math.random(), y: 0.5 }, 
-    colors, 
-    scalar: 1.2 
+  const burst = () => confetti({
+    particleCount: 80,
+    spread: 100,
+    origin: { x: Math.random(), y: 0.5 },
+    colors,
+    scalar: 1.2
   });
-  
-  // Tembakan beruntun
-  burst(); 
-  setTimeout(burst, 300);  
-  setTimeout(burst, 600);  
-  
-  // Ledakan besar dari pojok kiri bawah dan kanan bawah ke arah tengah layar
+  burst();
+  setTimeout(burst, 300);
+  setTimeout(burst, 600);
   setTimeout(() => {
     confetti({ particleCount: 100, angle: 60, spread: 70, origin: { x: 0, y: 0.8 }, colors });
     confetti({ particleCount: 100, angle: 120, spread: 70, origin: { x: 1, y: 0.8 }, colors });
