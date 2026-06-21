@@ -177,8 +177,13 @@
 
     /* ── Confetti canvas ── */
     #confetti-canvas {
-      position: fixed; inset: 0;
-      pointer-events: none; z-index: 50;
+      position: fixed; 
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none; 
+      z-index: 9999; /* Ditinggikan supaya di atas semua elemen */
     }
 
     /* ── Fade up ── */
@@ -572,14 +577,28 @@ function celebrate() { goToStep(5); }
 
 function startCelebration() {
   if (typeof confetti === 'undefined') return;
-  const canvas = document.getElementById('confetti-canvas');
-  const fire = confetti.create(canvas, { resize: true, useWorker: false });
+  
   const colors = ['#F4A7B9','#FADADD','#C9956C','#E8D5F5','#ffffff','#f7cdd9'];
-  const burst = () => fire({ particleCount:60, spread:80, origin:{x:Math.random(), y:.4}, colors, shapes:['circle'], scalar:1.2 });
-  burst();
-  setTimeout(burst, 400);
-  setTimeout(burst, 900);
-  setTimeout(() => fire({ particleCount:120, spread:120, origin:{x:.5, y:.3}, colors, shapes:['circle'], scalar:1.5 }), 1500);
+  
+  // Fungsi ledakan acak kiri & kanan layar
+  const burst = () => confetti({ 
+    particleCount: 80, 
+    spread: 100, 
+    origin: { x: Math.random(), y: 0.5 }, 
+    colors, 
+    scalar: 1.2 
+  });
+  
+  // Tembakan beruntun
+  burst(); 
+  setTimeout(burst, 300);  
+  setTimeout(burst, 600);  
+  
+  // Ledakan besar dari pojok kiri bawah dan kanan bawah ke arah tengah layar
+  setTimeout(() => {
+    confetti({ particleCount: 100, angle: 60, spread: 70, origin: { x: 0, y: 0.8 }, colors });
+    confetti({ particleCount: 100, angle: 120, spread: 70, origin: { x: 1, y: 0.8 }, colors });
+  }, 1000);
 }
 
 /* ════════════════════════════════
