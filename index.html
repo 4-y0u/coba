@@ -1,1118 +1,1667 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Buat Kamu 🤍</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-  <style>
-    :root {
-      --rose:    #F4A7B9;
-      --blush:   #FADADD;
-      --cream:   #FFF8F5;
-      --gold:    #C9956C;
-      --lavender:#E8D5F5;
-      --deep:    #7C4D6E;
-      --text:    #5A3A4A;
-    }
-    * { box-sizing: border-box; }
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background: var(--cream);
-      color: var(--text);
-      overflow-x: hidden;
-      min-height: 100vh;
-    }
-    h1, h2, h3, .serif { font-family: 'Playfair Display', Georgia, serif; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buat Kamu 🤍</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <style>
+      :root {
+        --rose: #f4a7b9;
+        --blush: #fadadd;
+        --cream: #fff8f5;
+        --gold: #c9956c;
+        --lavender: #e8d5f5;
+        --deep: #7c4d6e;
+        --text: #5a3a4a;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Montserrat", sans-serif;
+        background: var(--cream);
+        color: var(--text);
+        overflow-x: hidden;
+        min-height: 100vh;
+      }
+      h1,
+      h2,
+      h3,
+      .serif {
+        font-family: "Playfair Display", Georgia, serif;
+      }
 
-    /* ── Floating Music Trigger Button ── */
-    #music-trigger {
-      position: fixed;
-      bottom: 1.4rem;
-      left: 1.4rem;
-      z-index: 90;
-      width: 52px;
-      height: 52px;
-      border-radius: 9999px;
-      background: linear-gradient(135deg, var(--rose), var(--deep));
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 20px rgba(124,77,110,.35);
-      transition: transform .2s, box-shadow .2s;
-    }
-    #music-trigger:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 28px rgba(124,77,110,.45);
-    }
-    #music-trigger .vinyl {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: conic-gradient(
-        #fff0f5 0deg 45deg,
-        #f4a7b9 45deg 90deg,
-        #fff0f5 90deg 135deg,
-        #e8d5f5 135deg 180deg,
-        #fff0f5 180deg 225deg,
-        #f4a7b9 225deg 270deg,
-        #fff0f5 270deg 315deg,
-        #e8d5f5 315deg 360deg
-      );
-      position: relative;
-      transition: transform .1s;
-    }
-    #music-trigger.playing .vinyl {
-      animation: spin-vinyl 3s linear infinite;
-    }
-    @keyframes spin-vinyl {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-    #music-trigger .vinyl::after {
-      content: '';
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 9px; height: 9px;
-      border-radius: 50%;
-      background: white;
-      box-shadow: 0 0 0 2px rgba(124,77,110,.25);
-    }
-    /* Pulse ring when playing */
-    #music-trigger.playing::before {
-      content: '';
-      position: absolute;
-      inset: -6px;
-      border-radius: 50%;
-      border: 2px solid var(--rose);
-      animation: pulse-ring 1.8s ease-out infinite;
-    }
-    @keyframes pulse-ring {
-      0%   { opacity: .7; transform: scale(1); }
-      100% { opacity: 0;  transform: scale(1.45); }
-    }
+      /* ── Floating Music Trigger Button ── */
+      #music-trigger {
+        position: fixed;
+        bottom: 1rem;
+        left: 1rem;
+        z-index: 90;
+        width: 40px;
+        height: 40px;
+        border-radius: 9999px;
+        background: linear-gradient(135deg, var(--rose), var(--deep));
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 16px rgba(124, 77, 110, 0.35);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      #music-trigger:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 22px rgba(124, 77, 110, 0.45);
+      }
+      #music-trigger .vinyl {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: conic-gradient(
+          #fff0f5 0deg 45deg,
+          #f4a7b9 45deg 90deg,
+          #fff0f5 90deg 135deg,
+          #e8d5f5 135deg 180deg,
+          #fff0f5 180deg 225deg,
+          #f4a7b9 225deg 270deg,
+          #fff0f5 270deg 315deg,
+          #e8d5f5 315deg 360deg
+        );
+        position: relative;
+        transition: transform 0.1s;
+      }
+      #music-trigger.playing .vinyl {
+        animation: spin-vinyl 3s linear infinite;
+      }
+      @keyframes spin-vinyl {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      #music-trigger .vinyl::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: white;
+        box-shadow: 0 0 0 2px rgba(124, 77, 110, 0.25);
+      }
+      /* Pulse ring when playing */
+      #music-trigger.playing::before {
+        content: "";
+        position: absolute;
+        inset: -6px;
+        border-radius: 50%;
+        border: 2px solid var(--rose);
+        animation: pulse-ring 1.8s ease-out infinite;
+      }
+      @keyframes pulse-ring {
+        0% {
+          opacity: 0.7;
+          transform: scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(1.45);
+        }
+      }
 
-    /* ── Music Player Card ── */
-    #player-card {
-      position: fixed;
-      top: 50%;
-      left: 1.4rem;
-      transform: translateX(-20px) translateY(-50%) scale(.95);
-      z-index: 91;
-      width: min(340px, calc(100vw - 2rem));
-      background: white;
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: 0 16px 60px rgba(124,77,110,.22), 0 4px 16px rgba(124,77,110,.1);
-      border: 1px solid rgba(244,167,185,.3);
-      opacity: 0;
-      pointer-events: none;
-      transition: transform .38s cubic-bezier(.34,1.28,.64,1), opacity .3s ease;
-    }
-    #player-card.open {
-      transform: translateX(0) translateY(-50%) scale(1);
-      opacity: 1;
-      pointer-events: all;
-    }
+      /* ── Music Player Card ── */
+      #player-card {
+        position: fixed;
+        top: 50%;
+        left: 1rem;
+        transform: translateX(-20px) translateY(-50%) scale(0.95);
+        z-index: 91;
+        width: min(220px, calc(100vw - 2rem));
+        background: white;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow:
+          0 12px 40px rgba(124, 77, 110, 0.2),
+          0 3px 12px rgba(124, 77, 110, 0.1);
+        border: 1px solid rgba(244, 167, 185, 0.3);
+        opacity: 0;
+        pointer-events: none;
+        transition:
+          transform 0.38s cubic-bezier(0.34, 1.28, 0.64, 1),
+          opacity 0.3s ease;
+      }
+      #player-card.open {
+        transform: translateX(0) translateY(-50%) scale(1);
+        opacity: 1;
+        pointer-events: all;
+      }
 
-    /* Album art carousel */
-    #player-art-wrap {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 1;
-      overflow: hidden;
-    }
-    /* Carousel strip */
-    #art-strip {
-      display: flex;
-      width: 400%;
-      height: 100%;
-      transition: transform .45s cubic-bezier(.4,0,.2,1);
-    }
-    #art-strip img {
-      width: 25%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      flex-shrink: 0;
-    }
-    /* Gradient scrim on art */
-    #player-art-wrap::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(0,0,0,.0) 55%,
-        rgba(30,10,20,.55) 100%
-      );
-      pointer-events: none;
-    }
-    /* Carousel dot indicators */
-    #art-dots {
-      position: absolute;
-      bottom: .6rem;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 3;
-      display: flex;
-      gap: 5px;
-      pointer-events: none;
-    }
-    .art-dot {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.5);
-      transition: background .2s, transform .2s;
-    }
-    .art-dot.active {
-      background: white;
-      transform: scale(1.3);
-    }
-    /* Carousel nav arrows */
-    .art-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 3;
-      width: 26px; height: 26px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.22);
-      backdrop-filter: blur(6px);
-      border: 1px solid rgba(255,255,255,.35);
-      color: white;
-      font-size: .75rem;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background .2s;
-    }
-    .art-nav:hover { background: rgba(255,255,255,.38); }
-    #art-prev { left: .5rem; }
-    #art-next { right: .5rem; }
-    /* Close button */
-    #player-close {
-      position: absolute;
-      top: .7rem; right: .7rem;
-      z-index: 2;
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.25);
-      backdrop-filter: blur(6px);
-      border: 1px solid rgba(255,255,255,.4);
-      color: white;
-      font-size: .8rem;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background .2s, transform .2s;
-    }
-    #player-close:hover { background: rgba(255,255,255,.4); transform: scale(1.1); }
+      /* Album art carousel */
+      #player-art-wrap {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1;
+        overflow: hidden;
+      }
+      /* Carousel strip */
+      #art-strip {
+        display: flex;
+        width: 400%;
+        height: 100%;
+        transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      #art-strip img {
+        width: 25%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        flex-shrink: 0;
+      }
+      /* Gradient scrim on art */
+      #player-art-wrap::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0) 55%,
+          rgba(30, 10, 20, 0.55) 100%
+        );
+        pointer-events: none;
+      }
+      /* Carousel dot indicators */
+      #art-dots {
+        position: absolute;
+        bottom: 0.45rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3;
+        display: flex;
+        gap: 4px;
+        pointer-events: none;
+      }
+      .art-dot {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        transition:
+          background 0.2s,
+          transform 0.2s;
+      }
+      .art-dot.active {
+        background: white;
+        transform: scale(1.3);
+      }
+      /* Carousel nav arrows */
+      .art-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 3;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.22);
+        backdrop-filter: blur(6px);
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        color: white;
+        font-size: 0.65rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+      }
+      .art-nav:hover {
+        background: rgba(255, 255, 255, 0.38);
+      }
+      #art-prev {
+        left: 0.35rem;
+      }
+      #art-next {
+        right: 0.35rem;
+      }
+      /* Close button */
+      #player-close {
+        position: absolute;
+        top: 0.45rem;
+        right: 0.45rem;
+        z-index: 2;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(6px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: white;
+        font-size: 0.65rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          background 0.2s,
+          transform 0.2s;
+      }
+      #player-close:hover {
+        background: rgba(255, 255, 255, 0.4);
+        transform: scale(1.1);
+      }
 
-    /* Equaliser bars (visible while playing) */
-    #player-eq {
-      position: absolute;
-      bottom: .8rem; left: .9rem;
-      z-index: 2;
-      display: flex; align-items: flex-end; gap: 2.5px;
-      height: 18px;
-      opacity: 0;
-      transition: opacity .3s;
-    }
-    #player-eq.active { opacity: 1; }
-    #player-eq span {
-      width: 3px;
-      border-radius: 2px;
-      background: rgba(255,255,255,.85);
-      animation: eq-bar 0s ease-in-out infinite alternate;
-    }
-    #player-eq span:nth-child(1) { animation-duration: .55s; }
-    #player-eq span:nth-child(2) { animation-duration: .40s; }
-    #player-eq span:nth-child(3) { animation-duration: .65s; }
-    #player-eq span:nth-child(4) { animation-duration: .45s; }
-    #player-eq.active span { animation-name: eq-bar; }
-    @keyframes eq-bar {
-      from { height: 4px; }
-      to   { height: 16px; }
-    }
+      /* Equaliser bars (visible while playing) */
+      #player-eq {
+        position: absolute;
+        bottom: 0.55rem;
+        left: 0.6rem;
+        z-index: 2;
+        display: flex;
+        align-items: flex-end;
+        gap: 2px;
+        height: 14px;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      #player-eq.active {
+        opacity: 1;
+      }
+      #player-eq span {
+        width: 2.5px;
+        border-radius: 2px;
+        background: rgba(255, 255, 255, 0.85);
+        animation: eq-bar 0s ease-in-out infinite alternate;
+      }
+      #player-eq span:nth-child(1) {
+        animation-duration: 0.55s;
+      }
+      #player-eq span:nth-child(2) {
+        animation-duration: 0.4s;
+      }
+      #player-eq span:nth-child(3) {
+        animation-duration: 0.65s;
+      }
+      #player-eq span:nth-child(4) {
+        animation-duration: 0.45s;
+      }
+      #player-eq.active span {
+        animation-name: eq-bar;
+      }
+      @keyframes eq-bar {
+        from {
+          height: 3px;
+        }
+        to {
+          height: 12px;
+        }
+      }
 
-    /* Body of the card */
-    #player-body {
-      padding: .95rem 1.1rem 1.1rem;
-      background: white;
-    }
+      /* Body of the card */
+      #player-body {
+        padding: 0.6rem 0.75rem 0.75rem;
+        background: white;
+      }
 
-    /* Song meta */
-    .player-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--deep);
-      line-height: 1.3;
-    }
-    .player-artist {
-      font-size: .67rem;
-      color: var(--gold);
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      margin-top: .15rem;
-    }
+      /* Song meta */
+      .player-title {
+        font-family: "Playfair Display", serif;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--deep);
+        line-height: 1.3;
+      }
+      .player-artist {
+        font-size: 0.55rem;
+        color: var(--gold);
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        margin-top: 0.1rem;
+      }
 
-    /* Progress bar */
-    .progress-wrap {
-      margin-top: .85rem;
-      position: relative;
-    }
-    .progress-track {
-      width: 100%;
-      height: 3px;
-      background: #f0e0e8;
-      border-radius: 9999px;
-      overflow: hidden;
-      cursor: pointer;
-    }
-    .progress-fill {
-      height: 100%;
-      border-radius: 9999px;
-      background: linear-gradient(90deg, var(--rose), var(--deep));
-      width: 0%;
-      transition: width .5s linear;
-    }
-    .progress-times {
-      display: flex;
-      justify-content: space-between;
-      margin-top: .3rem;
-      font-size: .6rem;
-      color: #c4a0b0;
-      letter-spacing: .03em;
-    }
+      /* Progress bar */
+      .progress-wrap {
+        margin-top: 0.55rem;
+        position: relative;
+      }
+      .progress-track {
+        width: 100%;
+        height: 2.5px;
+        background: #f0e0e8;
+        border-radius: 9999px;
+        overflow: hidden;
+        cursor: pointer;
+      }
+      .progress-fill {
+        height: 100%;
+        border-radius: 9999px;
+        background: linear-gradient(90deg, var(--rose), var(--deep));
+        width: 0%;
+        transition: width 0.5s linear;
+      }
+      .progress-times {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0.25rem;
+        font-size: 0.5rem;
+        color: #c4a0b0;
+        letter-spacing: 0.02em;
+      }
 
-    /* Controls */
-    .controls {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: .9rem;
-      padding: 0 .1rem;
-    }
-    .ctrl-btn {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--deep);
-      font-size: .9rem;
-      transition: background .18s, transform .18s;
-    }
-    .ctrl-btn:hover { background: #fde8ed; transform: scale(1.1); }
-    .ctrl-btn.active-toggle { color: var(--rose); }
+      /* Controls */
+      .controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 0.6rem;
+        padding: 0;
+      }
+      .ctrl-btn {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--deep);
+        transition:
+          background 0.18s,
+          transform 0.18s;
+      }
+      .ctrl-btn:hover {
+        background: #fde8ed;
+        transform: scale(1.1);
+      }
+      .ctrl-btn.active-toggle {
+        color: var(--rose);
+      }
 
-    .play-btn {
-      width: 48px; height: 48px;
-      border-radius: 50%;
-      border: none;
-      background: linear-gradient(135deg, var(--rose), var(--deep));
-      color: white;
-      font-size: 1.1rem;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 18px rgba(124,77,110,.3);
-      transition: transform .18s, box-shadow .18s;
-    }
-    .play-btn:hover { transform: scale(1.08); box-shadow: 0 6px 24px rgba(124,77,110,.4); }
-    .play-btn:active { transform: scale(.96); }
+      .play-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: none;
+        background: linear-gradient(135deg, var(--rose), var(--deep));
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 3px 12px rgba(124, 77, 110, 0.3);
+        transition:
+          transform 0.18s,
+          box-shadow 0.18s;
+      }
+      .play-btn:hover {
+        transform: scale(1.08);
+        box-shadow: 0 5px 18px rgba(124, 77, 110, 0.4);
+      }
+      .play-btn:active {
+        transform: scale(0.96);
+      }
 
-    /* ── Steps ── */
-    .step {
-      position: fixed; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      padding: 1.5rem;
-      z-index: 10;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .8s ease;
-    }
-    .step.active { opacity: 1; pointer-events: all; }
+      /* ── Steps ── */
+      .step {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        z-index: 10;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.8s ease;
+      }
+      .step.active {
+        opacity: 1;
+        pointer-events: all;
+      }
 
-    /* ── Envelope ── */
-    .envelope-wrap { perspective: 1000px; }
-    .envelope {
-      width: min(280px, 78vw);
-      height: min(200px, 56vw);
-      position: relative;
-      cursor: pointer;
-      transform-style: preserve-3d;
-      filter: drop-shadow(0 12px 32px rgba(180,80,110,.18));
-    }
-    .env-body {
-      width: 100%; height: 100%;
-      background: linear-gradient(135deg, #fff0f3 60%, #f7cdd9);
-      border-radius: 8px;
-      border: 2px solid #eeb8c8;
-      position: absolute;
-    }
-    .env-flap {
-      position: absolute; top: 0; left: 0;
-      width: 100%; height: 55%;
-      background: linear-gradient(135deg, #fde8ed, #f4b8c8);
-      border-radius: 8px 8px 0 0;
-      clip-path: polygon(0 0, 50% 100%, 100% 0);
-      border-left: 2px solid #eeb8c8;
-      border-right: 2px solid #eeb8c8;
-      border-top: 2px solid #eeb8c8;
-      transform-origin: top center;
-      transition: transform .7s cubic-bezier(.4,0,.2,1);
-      transform-style: preserve-3d;
-      z-index: 2;
-    }
-    .envelope.open .env-flap { transform: rotateX(-160deg); }
-    .env-left  { position:absolute; bottom:0; left:0;  width:50%; height:55%;
-                 background:linear-gradient(135deg,#fde8ed,#f4b8c8);
-                 clip-path:polygon(0 100%,100% 0,100% 100%);
-                 border-bottom:2px solid #eeb8c8; border-left:2px solid #eeb8c8; }
-    .env-right { position:absolute; bottom:0; right:0; width:50%; height:55%;
-                 background:linear-gradient(135deg,#f4b8c8,#fde8ed);
-                 clip-path:polygon(0 0,100% 100%,0 100%);
-                 border-bottom:2px solid #eeb8c8; border-right:2px solid #eeb8c8; }
-    .heart-sticker {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%,-50%);
-      font-size: 2.2rem; z-index: 3;
-      animation: pulse-heart 1.4s ease-in-out infinite;
-    }
-    @keyframes pulse-heart {
-      0%,100% { transform: translate(-50%,-50%) scale(1); }
-      50%      { transform: translate(-50%,-50%) scale(1.2); }
-    }
+      /* ── Envelope ── */
+      .envelope-wrap {
+        perspective: 1000px;
+      }
+      .envelope {
+        width: min(280px, 78vw);
+        height: min(200px, 56vw);
+        position: relative;
+        cursor: pointer;
+        transform-style: preserve-3d;
+        filter: drop-shadow(0 12px 32px rgba(180, 80, 110, 0.18));
+      }
+      .env-body {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #fff0f3 60%, #f7cdd9);
+        border-radius: 8px;
+        border: 2px solid #eeb8c8;
+        position: absolute;
+      }
+      .env-flap {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 55%;
+        background: linear-gradient(135deg, #fde8ed, #f4b8c8);
+        border-radius: 8px 8px 0 0;
+        clip-path: polygon(0 0, 50% 100%, 100% 0);
+        border-left: 2px solid #eeb8c8;
+        border-right: 2px solid #eeb8c8;
+        border-top: 2px solid #eeb8c8;
+        transform-origin: top center;
+        transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-style: preserve-3d;
+        z-index: 2;
+      }
+      .envelope.open .env-flap {
+        transform: rotateX(-160deg);
+      }
+      .env-left {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50%;
+        height: 55%;
+        background: linear-gradient(135deg, #fde8ed, #f4b8c8);
+        clip-path: polygon(0 100%, 100% 0, 100% 100%);
+        border-bottom: 2px solid #eeb8c8;
+        border-left: 2px solid #eeb8c8;
+      }
+      .env-right {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 50%;
+        height: 55%;
+        background: linear-gradient(135deg, #f4b8c8, #fde8ed);
+        clip-path: polygon(0 0, 100% 100%, 0 100%);
+        border-bottom: 2px solid #eeb8c8;
+        border-right: 2px solid #eeb8c8;
+      }
+      .heart-sticker {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2.2rem;
+        z-index: 3;
+        animation: pulse-heart 1.4s ease-in-out infinite;
+      }
+      @keyframes pulse-heart {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.2);
+        }
+      }
 
-    /* ── Letter ── */
-    .letter-card {
-      background: white;
-      border-radius: 20px;
-      padding: clamp(1.5rem, 5vw, 3rem);
-      max-width: 640px; width: 100%;
-      box-shadow: 0 12px 60px rgba(180,80,110,.12), 0 2px 8px rgba(180,80,110,.08);
-      border: 1px solid #fde8ed;
-      max-height: 88vh;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: var(--rose) transparent;
-    }
-    .letter-card::-webkit-scrollbar { width: 4px; }
-    .letter-card::-webkit-scrollbar-thumb { background: var(--rose); border-radius: 4px; }
-    .typewriter { min-height: 1.4em; }
+      /* ── Letter ── */
+      .letter-card {
+        background: white;
+        border-radius: 20px;
+        padding: clamp(1.5rem, 5vw, 3rem);
+        max-width: 640px;
+        width: 100%;
+        box-shadow:
+          0 12px 60px rgba(180, 80, 110, 0.12),
+          0 2px 8px rgba(180, 80, 110, 0.08);
+        border: 1px solid #fde8ed;
+        max-height: 88vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--rose) transparent;
+      }
+      .letter-card::-webkit-scrollbar {
+        width: 4px;
+      }
+      .letter-card::-webkit-scrollbar-thumb {
+        background: var(--rose);
+        border-radius: 4px;
+      }
+      .typewriter {
+        min-height: 1.4em;
+      }
 
-    /* ── Polaroid ── */
-    .polaroid {
-      background: white;
-      padding: .75rem .75rem .5rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,.1);
-      border-radius: 2px;
-      text-align: center;
-      transform: rotate(-2deg);
-      transition: transform .3s;
-    }
-    .polaroid:hover { transform: rotate(0deg) scale(1.03); }
-    .polaroid:nth-child(2) { transform: rotate(2deg); }
-    .polaroid:nth-child(2):hover { transform: rotate(0deg) scale(1.03); }
-    .photo-slot {
-      width: 100%; aspect-ratio: 1;
-      background: linear-gradient(135deg, #fde8ed, #e8d5f5);
-      display: flex; align-items: center; justify-content: center;
-      font-size: .65rem; color: #bbb;
-      border-radius: 1px; overflow: hidden;
-    }
-    .photo-slot img { width:100%; height:100%; object-fit:cover; }
+      /* ── Polaroid ── */
+      .polaroid {
+        background: white;
+        padding: 0.75rem 0.75rem 0.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 2px;
+        text-align: center;
+        transform: rotate(-2deg);
+        transition: transform 0.3s;
+      }
+      .polaroid:hover {
+        transform: rotate(0deg) scale(1.03);
+      }
+      .polaroid:nth-child(2) {
+        transform: rotate(2deg);
+      }
+      .polaroid:nth-child(2):hover {
+        transform: rotate(0deg) scale(1.03);
+      }
+      .photo-slot {
+        width: 100%;
+        aspect-ratio: 1;
+        background: linear-gradient(135deg, #fde8ed, #e8d5f5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.65rem;
+        color: #bbb;
+        border-radius: 1px;
+        overflow: hidden;
+      }
+      .photo-slot img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
-    /* ── Promises ── */
-    .promise-card {
-      background: white;
-      border-left: 3px solid var(--rose);
-      border-radius: 0 12px 12px 0;
-      padding: .9rem 1.1rem;
-      box-shadow: 0 3px 16px rgba(180,80,110,.08);
-      opacity: 0;
-      transform: translateX(-20px);
-      transition: opacity .6s ease, transform .6s ease;
-    }
-    .promise-card.visible { opacity: 1; transform: translateX(0); }
+      /* ── Promises ── */
+      .promise-card {
+        background: white;
+        border-left: 3px solid var(--rose);
+        border-radius: 0 12px 12px 0;
+        padding: 0.9rem 1.1rem;
+        box-shadow: 0 3px 16px rgba(180, 80, 110, 0.08);
+        opacity: 0;
+        transform: translateX(-20px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+      .promise-card.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
 
-    /* ── Decision buttons ── */
-    #btn-yes { animation: pulse-btn 2s ease-in-out infinite; }
-    @keyframes pulse-btn {
-      0%,100% { box-shadow: 0 0 0 0 rgba(244,167,185,.5); }
-      60%      { box-shadow: 0 0 0 14px rgba(244,167,185,0); }
-    }
-    #btn-no {
-      position: absolute;
-      transition: top .25s cubic-bezier(.4,0,.2,1), left .25s cubic-bezier(.4,0,.2,1);
-    }
+      /* ── Decision buttons ── */
+      #btn-yes {
+        animation: pulse-btn 2s ease-in-out infinite;
+      }
+      @keyframes pulse-btn {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(244, 167, 185, 0.5);
+        }
+        60% {
+          box-shadow: 0 0 0 14px rgba(244, 167, 185, 0);
+        }
+      }
+      #btn-no {
+        position: absolute;
+        transition:
+          top 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+          left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      }
 
-    /* ── Confetti canvas ── */
-    #confetti-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      pointer-events: none;
-      z-index: 9999;
-    }
+      /* ── Confetti canvas ── */
+      #confetti-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 9999;
+      }
 
-    /* ── Fade up ── */
-    @keyframes fadeUp {
-      from { opacity:0; transform:translateY(24px); }
-      to   { opacity:1; transform:translateY(0); }
-    }
-    .fade-up { animation: fadeUp .7s ease forwards; }
+      /* ── Fade up ── */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .fade-up {
+        animation: fadeUp 0.7s ease forwards;
+      }
 
-    /* ── Floating hearts ── */
-    .float-heart {
-      position: fixed; pointer-events: none; z-index: 1;
-      animation: floatUp linear infinite; opacity: 0;
-    }
-    @keyframes floatUp {
-      0%   { transform:translateY(0) scale(.8) rotate(-10deg); opacity:0; }
-      10%  { opacity:.25; }
-      90%  { opacity:.1; }
-      100% { transform:translateY(-110vh) scale(1.1) rotate(15deg); opacity:0; }
-    }
+      /* ── Floating hearts ── */
+      .float-heart {
+        position: fixed;
+        pointer-events: none;
+        z-index: 1;
+        animation: floatUp linear infinite;
+        opacity: 0;
+      }
+      @keyframes floatUp {
+        0% {
+          transform: translateY(0) scale(0.8) rotate(-10deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.25;
+        }
+        90% {
+          opacity: 0.1;
+        }
+        100% {
+          transform: translateY(-110vh) scale(1.1) rotate(15deg);
+          opacity: 0;
+        }
+      }
 
-    /* ── Cursor sparkle ── */
-    .sparkle {
-      position: fixed; pointer-events: none; z-index: 200;
-      font-size: .9rem; animation: sparklePop .6s ease forwards;
-    }
-    @keyframes sparklePop {
-      0%   { opacity:1; transform:scale(0) translateY(0); }
-      50%  { opacity:1; transform:scale(1.4) translateY(-14px); }
-      100% { opacity:0; transform:scale(.8) translateY(-28px); }
-    }
+      /* ── Cursor sparkle ── */
+      .sparkle {
+        position: fixed;
+        pointer-events: none;
+        z-index: 200;
+        font-size: 0.9rem;
+        animation: sparklePop 0.6s ease forwards;
+      }
+      @keyframes sparklePop {
+        0% {
+          opacity: 1;
+          transform: scale(0) translateY(0);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.4) translateY(-14px);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0.8) translateY(-28px);
+        }
+      }
 
-    .step-inner {
-      width: 100%; max-width: 640px; max-height: 90vh;
-      overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--rose) transparent;
-    }
-    .step-inner::-webkit-scrollbar { width: 4px; }
-    .step-inner::-webkit-scrollbar-thumb { background: var(--rose); border-radius: 4px; }
+      .step-inner {
+        width: 100%;
+        max-width: 640px;
+        max-height: 90vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--rose) transparent;
+      }
+      .step-inner::-webkit-scrollbar {
+        width: 4px;
+      }
+      .step-inner::-webkit-scrollbar-thumb {
+        background: var(--rose);
+        border-radius: 4px;
+      }
 
-    .wavy { color: var(--rose); font-size: 1.4rem; letter-spacing: .1rem; }
-  </style>
-</head>
-<body>
+      .wavy {
+        color: var(--rose);
+        font-size: 1.4rem;
+        letter-spacing: 0.1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="hearts-layer" aria-hidden="true"></div>
+    <canvas id="confetti-canvas" aria-hidden="true"></canvas>
 
-<div id="hearts-layer" aria-hidden="true"></div>
-<canvas id="confetti-canvas" aria-hidden="true"></canvas>
-
-<!-- ══════════════════════════════════════
+    <!-- ══════════════════════════════════════
      FLOATING MUSIC TRIGGER BUTTON
 ══════════════════════════════════════ -->
-<button id="music-trigger" aria-label="Open music player" onclick="togglePlayerCard()">
-  <div class="vinyl"></div>
-</button>
+    <button
+      id="music-trigger"
+      aria-label="Open music player"
+      onclick="togglePlayerCard()"
+    >
+      <div class="vinyl"></div>
+    </button>
 
-<!-- ══════════════════════════════════════
+    <!-- ══════════════════════════════════════
      MUSIC PLAYER CARD
 ══════════════════════════════════════ -->
-<div id="player-card" role="region" aria-label="Music player">
-
-  <!-- Album art carousel -->
-  <div id="player-art-wrap">
-    <div id="art-strip">
-      <img src="foto1.jpg" alt="Foto 1" onerror="this.style.background='linear-gradient(135deg,#fde8ed,#e8d5f5)';this.removeAttribute('src')"/>
-      <img src="foto2.jpg" alt="Foto 2" onerror="this.style.background='linear-gradient(135deg,#e8d5f5,#fde8ed)';this.removeAttribute('src')"/>
-      <img src="foto3.jpg" alt="Foto 3" onerror="this.style.background='linear-gradient(135deg,#fadadd,#f4a7b9)';this.removeAttribute('src')"/>
-      <img src="foto4.jpg" alt="Foto 4" onerror="this.style.background='linear-gradient(135deg,#f4a7b9,#c9956c)';this.removeAttribute('src')"/>
-    </div>
-    <!-- Nav arrows -->
-    <button class="art-nav" id="art-prev" onclick="artNav(-1)" aria-label="Previous photo">‹</button>
-    <button class="art-nav" id="art-next" onclick="artNav(1)"  aria-label="Next photo">›</button>
-    <!-- Dot indicators -->
-    <div id="art-dots">
-      <div class="art-dot active"></div>
-      <div class="art-dot"></div>
-      <div class="art-dot"></div>
-      <div class="art-dot"></div>
-    </div>
-    <button id="player-close" onclick="closePlayerCard()" aria-label="Tutup player">✕</button>
-    <!-- EQ bars -->
-    <div id="player-eq">
-      <span></span><span></span><span></span><span></span>
-    </div>
-  </div>
-
-  <!-- Body -->
-  <div id="player-body">
-    <!-- Song info -->
-    <div style="display:flex;justify-content:space-between;align-items:flex-start">
-      <div>
-        <p class="player-title">Untuk Kamu 🤍</p>
-        <p class="player-artist">Melodi Hatiku</p>
-      </div>
-      <!-- Heart favourite -->
-      <button id="fav-btn" onclick="toggleFav()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--rose);padding:.1rem;" aria-label="Favourite">♡</button>
-    </div>
-
-    <!-- Progress bar -->
-    <div class="progress-wrap">
-      <div class="progress-track" id="progress-track" onclick="seekAudio(event)">
-        <div class="progress-fill" id="progress-fill"></div>
-      </div>
-      <div class="progress-times">
-        <span id="time-current">00:00</span>
-        <span id="time-total">--:--</span>
-      </div>
-    </div>
-
-    <!-- Controls -->
-    <div class="controls">
-      <!-- Shuffle -->
-      <button class="ctrl-btn" id="shuffle-btn" onclick="toggleShuffle()" aria-label="Shuffle" title="Shuffle">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="16 3 21 3 21 8"></polyline>
-          <line x1="4" y1="20" x2="21" y2="3"></line>
-          <polyline points="21 16 21 21 16 21"></polyline>
-          <line x1="15" y1="15" x2="21" y2="21"></line>
-        </svg>
-      </button>
-      <!-- Prev -->
-      <button class="ctrl-btn" onclick="seekPrev()" aria-label="Restart">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/>
-        </svg>
-      </button>
-      <!-- Play / Pause -->
-      <button class="play-btn" id="play-btn" onclick="togglePlay()" aria-label="Play/Pause">
-        <svg id="icon-play" width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-        <svg id="icon-pause" width="20" height="20" viewBox="0 0 24 24" fill="white" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-      </button>
-      <!-- Next -->
-      <button class="ctrl-btn" onclick="seekNext()" aria-label="Forward 10s">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M6 18l8.5-6L6 6v12zm2-8.14 5.02 2.14L8 14.14V9.86zM16 6h2v12h-2z"/>
-        </svg>
-      </button>
-      <!-- Loop -->
-      <button class="ctrl-btn" id="loop-btn" onclick="toggleLoop()" aria-label="Loop" title="Loop">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="17 1 21 5 17 9"></polyline>
-          <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
-          <polyline points="7 23 3 19 7 15"></polyline>
-          <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
-        </svg>
-      </button>
-    </div>
-  </div>
-</div>
-
-<audio id="bg-music" loop>
-  <source src="musik.mp3" type="audio/mpeg" />
-</audio>
-
-<!-- ═══════════════ STEP 1 — ENVELOPE ═══════════════ -->
-<section class="step active" id="step-1">
-  <div class="text-center flex flex-col items-center gap-8">
-    <div class="fade-up" style="animation-delay:.3s;opacity:0">
-      <p class="serif italic text-xl md:text-2xl" style="color:var(--deep)">Ada pesan khusus buat kamu...</p>
-      <p class="text-sm mt-1" style="color:var(--gold)">✨ Klik untuk buka ✨</p>
-    </div>
-    <div class="envelope-wrap fade-up" style="animation-delay:.7s;opacity:0">
-      <div class="envelope" id="envelope" onclick="openEnvelope()" role="button" tabindex="0" aria-label="Buka surat">
-        <div class="env-body"></div>
-        <div class="env-left"></div>
-        <div class="env-right"></div>
-        <div class="env-flap"></div>
-        <div class="heart-sticker">💝</div>
-      </div>
-    </div>
-    <p class="text-xs fade-up" style="color:#cba;animation-delay:1.2s;opacity:0">(Pasang earphone ya 🎧)</p>
-  </div>
-</section>
-
-<!-- ═══════════════ STEP 2 — LETTER ═══════════════ -->
-<section class="step" id="step-2">
-  <div class="step-inner flex flex-col items-center gap-6">
-    <div class="letter-card">
-      <div class="text-center mb-6">
-        <p class="text-xs uppercase tracking-widest mb-2" style="color:var(--rose)">Untuk kamu yang paling spesial</p>
-        <h1 class="serif text-2xl md:text-3xl font-semibold" style="color:var(--deep)">Surat dari hatiku</h1>
-        <div class="wavy mt-2">~ ♡ ~</div>
-      </div>
-      <div id="letter-text" class="space-y-4 text-sm md:text-base leading-relaxed" style="color:var(--text)"></div>
-
-      <div id="polaroid-section" class="hidden mt-8">
-        <p class="text-center text-xs uppercase tracking-widest mb-4" style="color:var(--rose)">Momen kita yang indah ✨</p>
-        <div class="grid grid-cols-2 gap-4">
-          <div class="polaroid flex flex-col items-center">
-            <div class="photo-slot w-full h-full overflow-hidden rounded">
-              <img src="foto1.jpg" alt="Foto kita 1" class="w-full h-full object-cover">
-            </div>
-            <p class="text-xs mt-2 serif italic text-center" style="color:var(--deep)">Momen favorit kita ♡</p>
-          </div>
-          <div class="polaroid flex flex-col items-center">
-            <div class="photo-slot w-full h-full overflow-hidden rounded">
-              <img src="foto2.jpg" alt="Foto kita 2" class="w-full h-full object-cover">
-            </div>
-            <p class="text-xs mt-2 serif italic text-center" style="color:var(--deep)">Selalu ada tawa ♡</p>
-          </div>
-          <div class="polaroid flex flex-col items-center">
-            <div class="photo-slot w-full h-full overflow-hidden rounded">
-              <img src="foto3.jpg" alt="Foto kita 3" class="w-full h-full object-cover">
-            </div>
-            <p class="text-xs mt-2 serif italic text-center" style="color:var(--deep)">Waktu yang berharga ♡</p>
-          </div>
-          <div class="polaroid flex flex-col items-center">
-            <div class="photo-slot w-full h-full overflow-hidden rounded">
-              <img src="foto4.jpg" alt="Foto kita 4" class="w-full h-full object-cover">
-            </div>
-            <p class="text-xs mt-2 serif italic text-center" style="color:var(--deep)">Kamu segalanya ♡</p>
-          </div>
+    <div id="player-card" role="region" aria-label="Music player">
+      <!-- Album art carousel -->
+      <div id="player-art-wrap">
+        <div id="art-strip">
+          <img
+            src="foto1.jpg"
+            alt="Foto 1"
+            onerror="
+              this.style.background = 'linear-gradient(135deg,#fde8ed,#e8d5f5)';
+              this.removeAttribute('src');
+            "
+          />
+          <img
+            src="foto2.jpg"
+            alt="Foto 2"
+            onerror="
+              this.style.background = 'linear-gradient(135deg,#e8d5f5,#fde8ed)';
+              this.removeAttribute('src');
+            "
+          />
+          <img
+            src="foto3.jpg"
+            alt="Foto 3"
+            onerror="
+              this.style.background = 'linear-gradient(135deg,#fadadd,#f4a7b9)';
+              this.removeAttribute('src');
+            "
+          />
+          <img
+            src="foto4.jpg"
+            alt="Foto 4"
+            onerror="
+              this.style.background = 'linear-gradient(135deg,#f4a7b9,#c9956c)';
+              this.removeAttribute('src');
+            "
+          />
+        </div>
+        <!-- Nav arrows -->
+        <button
+          class="art-nav"
+          id="art-prev"
+          onclick="artNav(-1)"
+          aria-label="Previous photo"
+        >
+          ‹
+        </button>
+        <button
+          class="art-nav"
+          id="art-next"
+          onclick="artNav(1)"
+          aria-label="Next photo"
+        >
+          ›
+        </button>
+        <!-- Dot indicators -->
+        <div id="art-dots">
+          <div class="art-dot active"></div>
+          <div class="art-dot"></div>
+          <div class="art-dot"></div>
+          <div class="art-dot"></div>
+        </div>
+        <button
+          id="player-close"
+          onclick="closePlayerCard()"
+          aria-label="Tutup player"
+        >
+          ✕
+        </button>
+        <!-- EQ bars -->
+        <div id="player-eq">
+          <span></span><span></span><span></span><span></span>
         </div>
       </div>
 
-      <div id="letter-next-btn" class="hidden text-center mt-8">
-        <button onclick="goToStep(3)"
-          class="px-8 py-3 rounded-full text-white text-sm font-medium transition-all duration-300 hover:scale-105 active:scale-95"
-          style="background:linear-gradient(135deg,var(--rose),var(--deep));box-shadow:0 6px 24px rgba(180,80,110,.25)">
-          Lanjut baca... 💌
-        </button>
+      <!-- Body -->
+      <div id="player-body">
+        <!-- Song info -->
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+          "
+        >
+          <div>
+            <p class="player-title">Untuk Kamu 🤍</p>
+            <p class="player-artist">Melodi Hatiku</p>
+          </div>
+          <!-- Heart favourite -->
+          <button
+            id="fav-btn"
+            onclick="toggleFav()"
+            style="
+              background: none;
+              border: none;
+              cursor: pointer;
+              font-size: 0.9rem;
+              color: var(--rose);
+              padding: 0.1rem;
+            "
+            aria-label="Favourite"
+          >
+            ♡
+          </button>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="progress-wrap">
+          <div
+            class="progress-track"
+            id="progress-track"
+            onclick="seekAudio(event)"
+          >
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <div class="progress-times">
+            <span id="time-current">00:00</span>
+            <span id="time-total">--:--</span>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+          <!-- Shuffle -->
+          <button
+            class="ctrl-btn"
+            id="shuffle-btn"
+            onclick="toggleShuffle()"
+            aria-label="Shuffle"
+            title="Shuffle"
+          >
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="16 3 21 3 21 8"></polyline>
+              <line x1="4" y1="20" x2="21" y2="3"></line>
+              <polyline points="21 16 21 21 16 21"></polyline>
+              <line x1="15" y1="15" x2="21" y2="21"></line>
+            </svg>
+          </button>
+          <!-- Prev -->
+          <button class="ctrl-btn" onclick="seekPrev()" aria-label="Restart">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" />
+            </svg>
+          </button>
+          <!-- Play / Pause -->
+          <button
+            class="play-btn"
+            id="play-btn"
+            onclick="togglePlay()"
+            aria-label="Play/Pause"
+          >
+            <svg
+              id="icon-play"
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="white"
+            >
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            <svg
+              id="icon-pause"
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="white"
+              style="display: none"
+            >
+              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+            </svg>
+          </button>
+          <!-- Next -->
+          <button
+            class="ctrl-btn"
+            onclick="seekNext()"
+            aria-label="Forward 10s"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M6 18l8.5-6L6 6v12zm2-8.14 5.02 2.14L8 14.14V9.86zM16 6h2v12h-2z"
+              />
+            </svg>
+          </button>
+          <!-- Loop -->
+          <button
+            class="ctrl-btn"
+            id="loop-btn"
+            onclick="toggleLoop()"
+            aria-label="Loop"
+            title="Loop"
+          >
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="17 1 21 5 17 9"></polyline>
+              <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+              <polyline points="7 23 3 19 7 15"></polyline>
+              <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ═══════════════ STEP 3 — PROMISES ═══════════════ -->
-<section class="step" id="step-3">
-  <div class="step-inner flex flex-col items-center gap-6">
-    <div class="w-full max-w-lg space-y-6 px-1">
-      <div class="text-center fade-up" style="animation-delay:.1s;opacity:0">
-        <p class="text-xs uppercase tracking-widest mb-1" style="color:var(--rose)">Janjiku buat kamu</p>
-        <h2 class="serif text-2xl md:text-3xl font-semibold" style="color:var(--deep)">Aku berjanji...</h2>
-        <div class="wavy">~ ♡ ~</div>
-      </div>
-      <div class="space-y-3" id="promise-list"></div>
-      <div class="text-center pt-2">
-        <p class="serif italic text-base md:text-lg" style="color:var(--deep)">
-          "Kamu adalah alasan aku ingin jadi versi terbaik dari diriku."
+    <audio id="bg-music" loop>
+      <source src="musik.mp3" type="audio/mpeg" />
+    </audio>
+
+    <!-- ═══════════════ STEP 1 — ENVELOPE ═══════════════ -->
+    <section class="step active" id="step-1">
+      <div class="text-center flex flex-col items-center gap-8">
+        <div class="fade-up" style="animation-delay: 0.3s; opacity: 0">
+          <p
+            class="serif italic text-xl md:text-2xl"
+            style="color: var(--deep)"
+          >
+            Ada pesan khusus buat kamu...
+          </p>
+          <p class="text-sm mt-1" style="color: var(--gold)">
+            ✨ Klik untuk buka ✨
+          </p>
+        </div>
+        <div
+          class="envelope-wrap fade-up"
+          style="animation-delay: 0.7s; opacity: 0"
+        >
+          <div
+            class="envelope"
+            id="envelope"
+            onclick="openEnvelope()"
+            role="button"
+            tabindex="0"
+            aria-label="Buka surat"
+          >
+            <div class="env-body"></div>
+            <div class="env-left"></div>
+            <div class="env-right"></div>
+            <div class="env-flap"></div>
+            <div class="heart-sticker">💝</div>
+          </div>
+        </div>
+        <p
+          class="text-xs fade-up"
+          style="color: #cba; animation-delay: 1.2s; opacity: 0"
+        >
+          (Pasang earphone ya 🎧)
         </p>
       </div>
-      <div class="text-center mt-4">
-        <button onclick="goToStep(4)"
-          class="px-8 py-3 rounded-full text-white text-sm font-medium transition-all duration-300 hover:scale-105 active:scale-95"
-          style="background:linear-gradient(135deg,var(--rose),var(--deep));box-shadow:0 6px 24px rgba(180,80,110,.25)">
-          Ada satu pertanyaan... 🥺
-        </button>
+    </section>
+
+    <!-- ═══════════════ STEP 2 — LETTER ═══════════════ -->
+    <section class="step" id="step-2">
+      <div class="step-inner flex flex-col items-center gap-6">
+        <div class="letter-card">
+          <div class="text-center mb-6">
+            <p
+              class="text-xs uppercase tracking-widest mb-2"
+              style="color: var(--rose)"
+            >
+              Untuk kamu yang paling spesial
+            </p>
+            <h1
+              class="serif text-2xl md:text-3xl font-semibold"
+              style="color: var(--deep)"
+            >
+              Surat dari hatiku
+            </h1>
+            <div class="wavy mt-2">~ ♡ ~</div>
+          </div>
+          <div
+            id="letter-text"
+            class="space-y-4 text-sm md:text-base leading-relaxed"
+            style="color: var(--text)"
+          ></div>
+
+          <div id="polaroid-section" class="hidden mt-8">
+            <p
+              class="text-center text-xs uppercase tracking-widest mb-4"
+              style="color: var(--rose)"
+            >
+              Momen kita yang indah ✨
+            </p>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="polaroid flex flex-col items-center">
+                <div class="photo-slot w-full h-full overflow-hidden rounded">
+                  <img
+                    src="foto1.jpg"
+                    alt="Foto kita 1"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <p
+                  class="text-xs mt-2 serif italic text-center"
+                  style="color: var(--deep)"
+                >
+                  Momen favorit kita ♡
+                </p>
+              </div>
+              <div class="polaroid flex flex-col items-center">
+                <div class="photo-slot w-full h-full overflow-hidden rounded">
+                  <img
+                    src="foto2.jpg"
+                    alt="Foto kita 2"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <p
+                  class="text-xs mt-2 serif italic text-center"
+                  style="color: var(--deep)"
+                >
+                  Selalu ada tawa ♡
+                </p>
+              </div>
+              <div class="polaroid flex flex-col items-center">
+                <div class="photo-slot w-full h-full overflow-hidden rounded">
+                  <img
+                    src="foto3.jpg"
+                    alt="Foto kita 3"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <p
+                  class="text-xs mt-2 serif italic text-center"
+                  style="color: var(--deep)"
+                >
+                  Waktu yang berharga ♡
+                </p>
+              </div>
+              <div class="polaroid flex flex-col items-center">
+                <div class="photo-slot w-full h-full overflow-hidden rounded">
+                  <img
+                    src="foto4.jpg"
+                    alt="Foto kita 4"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <p
+                  class="text-xs mt-2 serif italic text-center"
+                  style="color: var(--deep)"
+                >
+                  Kamu segalanya ♡
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div id="letter-next-btn" class="hidden text-center mt-8">
+            <button
+              onclick="goToStep(3)"
+              class="px-8 py-3 rounded-full text-white text-sm font-medium transition-all duration-300 hover:scale-105 active:scale-95"
+              style="
+                background: linear-gradient(135deg, var(--rose), var(--deep));
+                box-shadow: 0 6px 24px rgba(180, 80, 110, 0.25);
+              "
+            >
+              Lanjut baca... 💌
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ═══════════════ STEP 4 — DECISION ═══════════════ -->
-<section class="step" id="step-4" style="position:fixed;">
-  <div class="text-center space-y-8 px-4 relative" style="z-index:20">
-    <div class="fade-up" style="animation-delay:.2s;opacity:0">
-      <div class="text-4xl mb-4">🥺</div>
-      <h2 class="serif text-2xl md:text-3xl font-semibold mb-2" style="color:var(--deep)">
-        Kamu mau kan<br/>maafin aku?
-      </h2>
-      <p class="text-sm" style="color:var(--gold)">Jawab jujur ya sayang...</p>
-    </div>
-    <div class="flex items-center justify-center fade-up" style="animation-delay:.6s;opacity:0">
-      <button id="btn-yes" onclick="celebrate()"
-        class="px-10 py-4 rounded-full text-white text-base font-semibold"
-        style="background:linear-gradient(135deg,var(--rose),#c45c7a)">
-        Mau ✨
+    <!-- ═══════════════ STEP 3 — PROMISES ═══════════════ -->
+    <section class="step" id="step-3">
+      <div class="step-inner flex flex-col items-center gap-6">
+        <div class="w-full max-w-lg space-y-6 px-1">
+          <div
+            class="text-center fade-up"
+            style="animation-delay: 0.1s; opacity: 0"
+          >
+            <p
+              class="text-xs uppercase tracking-widest mb-1"
+              style="color: var(--rose)"
+            >
+              Janjiku buat kamu
+            </p>
+            <h2
+              class="serif text-2xl md:text-3xl font-semibold"
+              style="color: var(--deep)"
+            >
+              Aku berjanji...
+            </h2>
+            <div class="wavy">~ ♡ ~</div>
+          </div>
+          <div class="space-y-3" id="promise-list"></div>
+          <div class="text-center pt-2">
+            <p
+              class="serif italic text-base md:text-lg"
+              style="color: var(--deep)"
+            >
+              "Kamu adalah alasan aku ingin jadi versi terbaik dari diriku."
+            </p>
+          </div>
+          <div class="text-center mt-4">
+            <button
+              onclick="goToStep(4)"
+              class="px-8 py-3 rounded-full text-white text-sm font-medium transition-all duration-300 hover:scale-105 active:scale-95"
+              style="
+                background: linear-gradient(135deg, var(--rose), var(--deep));
+                box-shadow: 0 6px 24px rgba(180, 80, 110, 0.25);
+              "
+            >
+              Ada satu pertanyaan... 🥺
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ STEP 4 — DECISION ═══════════════ -->
+    <section class="step" id="step-4" style="position: fixed">
+      <div class="text-center space-y-8 px-4 relative" style="z-index: 20">
+        <div class="fade-up" style="animation-delay: 0.2s; opacity: 0">
+          <div class="text-4xl mb-4">🥺</div>
+          <h2
+            class="serif text-2xl md:text-3xl font-semibold mb-2"
+            style="color: var(--deep)"
+          >
+            Kamu mau kan<br />maafin aku?
+          </h2>
+          <p class="text-sm" style="color: var(--gold)">
+            Jawab jujur ya sayang...
+          </p>
+        </div>
+        <div
+          class="flex items-center justify-center fade-up"
+          style="animation-delay: 0.6s; opacity: 0"
+        >
+          <button
+            id="btn-yes"
+            onclick="celebrate()"
+            class="px-10 py-4 rounded-full text-white text-base font-semibold"
+            style="background: linear-gradient(135deg, var(--rose), #c45c7a)"
+          >
+            Mau ✨
+          </button>
+        </div>
+        <p
+          class="text-xs fade-up"
+          style="color: #cba; animation-delay: 1s; opacity: 0"
+        >
+          (Coba klik tombol "Nggak" deh, kalau bisa... 😏)
+        </p>
+      </div>
+      <button
+        id="btn-no"
+        onclick="runaway(this)"
+        class="px-8 py-3 rounded-full text-sm font-medium border-2"
+        style="
+          border-color: var(--rose);
+          color: var(--deep);
+          background: white;
+          z-index: 30;
+        "
+      >
+        Nggak 😤
       </button>
-    </div>
-    <p class="text-xs fade-up" style="color:#cba;animation-delay:1s;opacity:0">
-      (Coba klik tombol "Nggak" deh, kalau bisa... 😏)
-    </p>
-  </div>
-  <button id="btn-no"
-    onclick="runaway(this)"
-    class="px-8 py-3 rounded-full text-sm font-medium border-2"
-    style="border-color:var(--rose);color:var(--deep);background:white;z-index:30;">
-    Nggak 😤
-  </button>
-</section>
+    </section>
 
-<!-- ═══════════════ STEP 5 — CELEBRATION ═══════════════ -->
-<section class="step" id="step-5">
-  <div class="text-center space-y-8 px-4 max-w-md">
-    <div class="text-5xl">🎉</div>
-    <div class="space-y-3">
-      <h2 class="serif text-2xl md:text-3xl font-bold" style="color:var(--deep)">Makasih banyak ya sayang!</h2>
-      <p class="text-base leading-relaxed" style="color:var(--text)">
-        I love you so much. Kamu adalah segalanya buat aku,<br/>
-        dan aku berjanji untuk selalu berusaha jadi lebih baik. 🤍
-      </p>
-      <p class="serif italic text-lg" style="color:var(--rose)">"Kamu adalah rumah yang selalu aku pulang."</p>
-    </div>
-    <div class="space-y-2">
-      <a href="https://wa.me/6285701141981?text=Aku%20udah%20maafin%20kok%2C%20sini%20peluk!%20%F0%9F%A4%97"
-        target="_blank" rel="noopener"
-        class="inline-block px-8 py-4 rounded-full text-white text-sm font-semibold transition-all duration-300 hover:scale-105 active:scale-95"
-        style="background:linear-gradient(135deg,#25D366,#128C7E);box-shadow:0 6px 24px rgba(37,211,102,.3)">
-        💬 Sini peluk aku!
-      </a>
-    </div>
-    <div class="text-3xl space-x-2">💗 🌸 💗 🌸 💗</div>
-  </div>
-</section>
+    <!-- ═══════════════ STEP 5 — CELEBRATION ═══════════════ -->
+    <section class="step" id="step-5">
+      <div class="text-center space-y-8 px-4 max-w-md">
+        <div class="text-5xl">🎉</div>
+        <div class="space-y-3">
+          <h2
+            class="serif text-2xl md:text-3xl font-bold"
+            style="color: var(--deep)"
+          >
+            Makasih banyak ya sayang!
+          </h2>
+          <p class="text-base leading-relaxed" style="color: var(--text)">
+            I love you so much. Kamu adalah segalanya buat aku,<br />
+            dan aku berjanji untuk selalu berusaha jadi lebih baik. 🤍
+          </p>
+          <p class="serif italic text-lg" style="color: var(--rose)">
+            "Kamu adalah rumah yang selalu aku pulang."
+          </p>
+        </div>
+        <div class="space-y-2">
+          <a
+            href="https://wa.me/6285701141981?text=Aku%20udah%20maafin%20kok%2C%20sini%20peluk!%20%F0%9F%A4%97"
+            target="_blank"
+            rel="noopener"
+            class="inline-block px-8 py-4 rounded-full text-white text-sm font-semibold transition-all duration-300 hover:scale-105 active:scale-95"
+            style="
+              background: linear-gradient(135deg, #25d366, #128c7e);
+              box-shadow: 0 6px 24px rgba(37, 211, 102, 0.3);
+            "
+          >
+            💬 Sini peluk aku!
+          </a>
+        </div>
+        <div class="text-3xl space-x-2">💗 🌸 💗 🌸 💗</div>
+      </div>
+    </section>
 
-<script>
-/* ════════════════════════════════
+    <script>
+      /* ════════════════════════════════
    STATE
 ════════════════════════════════ */
-let currentStep = 1;
-const audio = document.getElementById('bg-music');
-let playerCardOpen = false;
-let favActive = false;
-let shuffleActive = false;
-let loopActive = true; // default loop on
+      let currentStep = 1;
+      const audio = document.getElementById("bg-music");
+      let playerCardOpen = false;
+      let favActive = false;
+      let shuffleActive = false;
+      let loopActive = true; // default loop on
 
-/* ════════════════════════════════
+      /* ════════════════════════════════
    STEP TRANSITION
 ════════════════════════════════ */
-function goToStep(n) {
-  const prev = document.getElementById('step-' + currentStep);
-  const next = document.getElementById('step-' + n);
-  prev.classList.remove('active');
-  setTimeout(() => {
-    next.classList.add('active');
-    currentStep = n;
-    if (n === 2) startLetter();
-    if (n === 3) animatePromises();
-    if (n === 4) initRunaway();
-    if (n === 5) startCelebration();
-  }, 400);
-}
+      function goToStep(n) {
+        const prev = document.getElementById("step-" + currentStep);
+        const next = document.getElementById("step-" + n);
+        prev.classList.remove("active");
+        setTimeout(() => {
+          next.classList.add("active");
+          currentStep = n;
+          if (n === 2) startLetter();
+          if (n === 3) animatePromises();
+          if (n === 4) initRunaway();
+          if (n === 5) startCelebration();
+        }, 400);
+      }
 
-/* ════════════════════════════════
+      /* ════════════════════════════════
    STEP 1 — ENVELOPE
 ════════════════════════════════ */
-function openEnvelope() {
-  document.getElementById('envelope').classList.add('open');
-  // Play music
-  audio.play().catch(() => {});
-  setPlayingState(true);
-  // Open player card after short delay
-  setTimeout(() => {
-    openPlayerCard();
-  }, 700);
-  setTimeout(() => goToStep(2), 1100);
-}
-document.getElementById('envelope').addEventListener('keydown', e => {
-  if (e.key === 'Enter' || e.key === ' ') openEnvelope();
-});
+      function openEnvelope() {
+        document.getElementById("envelope").classList.add("open");
+        // Play music
+        audio.play().catch(() => {});
+        setPlayingState(true);
+        // Open player card after short delay
+        setTimeout(() => {
+          openPlayerCard();
+        }, 700);
+        setTimeout(() => goToStep(2), 1100);
+      }
+      document.getElementById("envelope").addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") openEnvelope();
+      });
 
-/* ════════════════════════════════
+      /* ════════════════════════════════
    MUSIC PLAYER CARD
 ════════════════════════════════ */
-function openPlayerCard() {
-  document.getElementById('player-card').classList.add('open');
-  playerCardOpen = true;
-}
-function closePlayerCard() {
-  document.getElementById('player-card').classList.remove('open');
-  playerCardOpen = false;
-}
-function togglePlayerCard() {
-  if (playerCardOpen) closePlayerCard();
-  else openPlayerCard();
-}
+      function openPlayerCard() {
+        document.getElementById("player-card").classList.add("open");
+        playerCardOpen = true;
+      }
+      function closePlayerCard() {
+        document.getElementById("player-card").classList.remove("open");
+        playerCardOpen = false;
+      }
+      function togglePlayerCard() {
+        if (playerCardOpen) closePlayerCard();
+        else openPlayerCard();
+      }
 
-/* ════════════════════════════════
+      /* ════════════════════════════════
    PLAY / PAUSE SYNC
 ════════════════════════════════ */
-function setPlayingState(playing) {
-  const trigger = document.getElementById('music-trigger');
-  const iconPlay = document.getElementById('icon-play');
-  const iconPause = document.getElementById('icon-pause');
-  const eq = document.getElementById('player-eq');
+      function setPlayingState(playing) {
+        const trigger = document.getElementById("music-trigger");
+        const iconPlay = document.getElementById("icon-play");
+        const iconPause = document.getElementById("icon-pause");
+        const eq = document.getElementById("player-eq");
 
-  if (playing) {
-    trigger.classList.add('playing');
-    iconPlay.style.display = 'none';
-    iconPause.style.display = '';
-    eq.classList.add('active');
-  } else {
-    trigger.classList.remove('playing');
-    iconPlay.style.display = '';
-    iconPause.style.display = 'none';
-    eq.classList.remove('active');
-  }
-}
+        if (playing) {
+          trigger.classList.add("playing");
+          iconPlay.style.display = "none";
+          iconPause.style.display = "";
+          eq.classList.add("active");
+        } else {
+          trigger.classList.remove("playing");
+          iconPlay.style.display = "";
+          iconPause.style.display = "none";
+          eq.classList.remove("active");
+        }
+      }
 
-function togglePlay() {
-  if (audio.paused) {
-    audio.play().catch(() => {});
-    setPlayingState(true);
-  } else {
-    audio.pause();
-    setPlayingState(false);
-  }
-}
+      function togglePlay() {
+        if (audio.paused) {
+          audio.play().catch(() => {});
+          setPlayingState(true);
+        } else {
+          audio.pause();
+          setPlayingState(false);
+        }
+      }
 
-audio.addEventListener('play',  () => setPlayingState(true));
-audio.addEventListener('pause', () => setPlayingState(false));
-audio.addEventListener('ended', () => setPlayingState(false));
+      audio.addEventListener("play", () => setPlayingState(true));
+      audio.addEventListener("pause", () => setPlayingState(false));
+      audio.addEventListener("ended", () => setPlayingState(false));
 
-/* ════════════════════════════════
+      /* ════════════════════════════════
    PROGRESS BAR
 ════════════════════════════════ */
-function formatTime(s) {
-  if (!isFinite(s)) return '--:--';
-  const m = Math.floor(s / 60);
-  const sec = Math.floor(s % 60);
-  return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
-}
+      function formatTime(s) {
+        if (!isFinite(s)) return "--:--";
+        const m = Math.floor(s / 60);
+        const sec = Math.floor(s % 60);
+        return String(m).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
+      }
 
-audio.addEventListener('timeupdate', () => {
-  const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
-  document.getElementById('progress-fill').style.width = pct + '%';
-  document.getElementById('time-current').textContent = formatTime(audio.currentTime);
-});
-audio.addEventListener('loadedmetadata', () => {
-  document.getElementById('time-total').textContent = formatTime(audio.duration);
-});
-audio.addEventListener('durationchange', () => {
-  document.getElementById('time-total').textContent = formatTime(audio.duration);
-});
+      audio.addEventListener("timeupdate", () => {
+        const pct = audio.duration
+          ? (audio.currentTime / audio.duration) * 100
+          : 0;
+        document.getElementById("progress-fill").style.width = pct + "%";
+        document.getElementById("time-current").textContent = formatTime(
+          audio.currentTime,
+        );
+      });
+      audio.addEventListener("loadedmetadata", () => {
+        document.getElementById("time-total").textContent = formatTime(
+          audio.duration,
+        );
+      });
+      audio.addEventListener("durationchange", () => {
+        document.getElementById("time-total").textContent = formatTime(
+          audio.duration,
+        );
+      });
 
-function seekAudio(e) {
-  if (!audio.duration) return;
-  const track = document.getElementById('progress-track');
-  const rect = track.getBoundingClientRect();
-  const ratio = (e.clientX - rect.left) / rect.width;
-  audio.currentTime = Math.max(0, Math.min(1, ratio)) * audio.duration;
-}
+      function seekAudio(e) {
+        if (!audio.duration) return;
+        const track = document.getElementById("progress-track");
+        const rect = track.getBoundingClientRect();
+        const ratio = (e.clientX - rect.left) / rect.width;
+        audio.currentTime = Math.max(0, Math.min(1, ratio)) * audio.duration;
+      }
 
-/* ════════════════════════════════
+      /* ════════════════════════════════
    CONTROLS
 ════════════════════════════════ */
-function seekPrev() {
-  audio.currentTime = 0;
-}
-function seekNext() {
-  audio.currentTime = Math.min(audio.currentTime + 10, audio.duration || 0);
-}
-function toggleFav() {
-  favActive = !favActive;
-  document.getElementById('fav-btn').textContent = favActive ? '♥' : '♡';
-  document.getElementById('fav-btn').style.color = favActive ? '#c45c7a' : 'var(--rose)';
-}
-function toggleShuffle() {
-  shuffleActive = !shuffleActive;
-  const btn = document.getElementById('shuffle-btn');
-  btn.classList.toggle('active-toggle', shuffleActive);
-}
-function toggleLoop() {
-  loopActive = !loopActive;
-  audio.loop = loopActive;
-  const btn = document.getElementById('loop-btn');
-  btn.classList.toggle('active-toggle', loopActive);
-}
-// Init loop state
-audio.loop = loopActive;
-document.getElementById('loop-btn').classList.add('active-toggle');
+      function seekPrev() {
+        audio.currentTime = 0;
+      }
+      function seekNext() {
+        audio.currentTime = Math.min(
+          audio.currentTime + 10,
+          audio.duration || 0,
+        );
+      }
+      function toggleFav() {
+        favActive = !favActive;
+        document.getElementById("fav-btn").textContent = favActive ? "♥" : "♡";
+        document.getElementById("fav-btn").style.color = favActive
+          ? "#c45c7a"
+          : "var(--rose)";
+      }
+      function toggleShuffle() {
+        shuffleActive = !shuffleActive;
+        const btn = document.getElementById("shuffle-btn");
+        btn.classList.toggle("active-toggle", shuffleActive);
+      }
+      function toggleLoop() {
+        loopActive = !loopActive;
+        audio.loop = loopActive;
+        const btn = document.getElementById("loop-btn");
+        btn.classList.toggle("active-toggle", loopActive);
+      }
+      // Init loop state
+      audio.loop = loopActive;
+      document.getElementById("loop-btn").classList.add("active-toggle");
 
-/* ════════════════════════════════
+      /* ════════════════════════════════
    ART CAROUSEL
 ════════════════════════════════ */
-let artIndex = 0;
-const artTotal = 4;
-let artAutoTimer = null;
+      let artIndex = 0;
+      const artTotal = 4;
+      let artAutoTimer = null;
 
-function artNav(dir) {
-  artIndex = (artIndex + dir + artTotal) % artTotal;
-  updateArt();
-  resetArtAuto();
-}
-function updateArt() {
-  document.getElementById('art-strip').style.transform = `translateX(-${artIndex * 25}%)`;
-  document.querySelectorAll('.art-dot').forEach((d, i) => {
-    d.classList.toggle('active', i === artIndex);
-  });
-}
-function startArtAuto() {
-  artAutoTimer = setInterval(() => {
-    artIndex = (artIndex + 1) % artTotal;
-    updateArt();
-  }, 3500);
-}
-function resetArtAuto() {
-  clearInterval(artAutoTimer);
-  startArtAuto();
-}
-startArtAuto();
+      function artNav(dir) {
+        artIndex = (artIndex + dir + artTotal) % artTotal;
+        updateArt();
+        resetArtAuto();
+      }
+      function updateArt() {
+        document.getElementById("art-strip").style.transform =
+          `translateX(-${artIndex * 25}%)`;
+        document.querySelectorAll(".art-dot").forEach((d, i) => {
+          d.classList.toggle("active", i === artIndex);
+        });
+      }
+      function startArtAuto() {
+        artAutoTimer = setInterval(() => {
+          artIndex = (artIndex + 1) % artTotal;
+          updateArt();
+        }, 4500);
+      }
+      function resetArtAuto() {
+        clearInterval(artAutoTimer);
+        startArtAuto();
+      }
+      startArtAuto();
 
-/* ════════════════════════════════
+      /* ════════════════════════════════
    STEP 2 — TYPEWRITER
 ════════════════════════════════ */
-const letterParagraphs = [
-  "Sayangku,",
-  "Aku nulis ini sambil ngerasain betapa beratnya menyesal. Maaf udah bikin kamu kecewa. Maaf udah nggak peka, egois, dan kadang bikin kamu ngerasa nggak dihargai. Kamu pantas diperlakukan jauh lebih baik dari itu.",
-  "Aku tau kata-kata aja nggak cukup. Tapi aku mau kamu tau, dari lubuk hati yang paling dalam — aku benar-benar nyesel. Kamu bukan cuma pacarku, kamu adalah orang yang bikin hidupku berarti.",
-  "Setiap senyummu, setiap tawa kecil kamu, setiap momen yang kita lalui bersama... semuanya berharga banget buat aku. Dan aku nggak mau kehilangan itu.",
-  "Aku nggak sempurna, dan aku nggak bisa janji buat nggak pernah salah lagi. Tapi aku janji untuk terus belajar, terus tumbuh, dan selalu menjadikan kebahagiaan kamu sebagai prioritasku.",
-  "Aku sayang kamu. Lebih dari yang bisa aku ungkapkan. 🤍"
-];
-let paraIndex = 0, charIndex = 0;
+      const letterParagraphs = [
+        "Sayangku,",
+        "Aku nulis ini sambil ngerasain betapa beratnya menyesal. Maaf udah bikin kamu kecewa. Maaf udah nggak peka, egois, dan kadang bikin kamu ngerasa nggak dihargai. Kamu pantas diperlakukan jauh lebih baik dari itu.",
+        "Aku tau kata-kata aja nggak cukup. Tapi aku mau kamu tau, dari lubuk hati yang paling dalam — aku benar-benar nyesel. Kamu bukan cuma pacarku, kamu adalah orang yang bikin hidupku berarti.",
+        "Setiap senyummu, setiap tawa kecil kamu, setiap momen yang kita lalui bersama... semuanya berharga banget buat aku. Dan aku nggak mau kehilangan itu.",
+        "Aku nggak sempurna, dan aku nggak bisa janji buat nggak pernah salah lagi. Tapi aku janji untuk terus belajar, terus tumbuh, dan selalu menjadikan kebahagiaan kamu sebagai prioritasku.",
+        "Aku sayang kamu. Lebih dari yang bisa aku ungkapkan. 🤍",
+      ];
+      let paraIndex = 0,
+        charIndex = 0;
 
-function startLetter() {
-  const container = document.getElementById('letter-text');
-  container.innerHTML = '';
-  paraIndex = 0; charIndex = 0;
-  typeLetter(container);
-}
-function typeLetter(container) {
-  if (paraIndex >= letterParagraphs.length) { finishLetter(); return; }
-  if (charIndex === 0) {
-    const p = document.createElement('p');
-    p.className = 'typewriter';
-    if (paraIndex === 0) p.classList.add('serif','font-semibold','text-lg');
-    container.appendChild(p);
-  }
-  const current = container.querySelectorAll('p')[paraIndex];
-  const text = letterParagraphs[paraIndex];
-  current.textContent = text.slice(0, charIndex + 1);
-  charIndex++;
-  if (charIndex < text.length) {
-    setTimeout(() => typeLetter(container), 22);
-  } else {
-    paraIndex++; charIndex = 0;
-    setTimeout(() => typeLetter(container), 480);
-  }
-}
-function finishLetter() {
-  document.getElementById('polaroid-section').classList.remove('hidden');
-  document.getElementById('letter-next-btn').classList.remove('hidden');
-}
+      function startLetter() {
+        const container = document.getElementById("letter-text");
+        container.innerHTML = "";
+        paraIndex = 0;
+        charIndex = 0;
+        typeLetter(container);
+      }
+      function typeLetter(container) {
+        if (paraIndex >= letterParagraphs.length) {
+          finishLetter();
+          return;
+        }
+        if (charIndex === 0) {
+          const p = document.createElement("p");
+          p.className = "typewriter";
+          if (paraIndex === 0)
+            p.classList.add("serif", "font-semibold", "text-lg");
+          container.appendChild(p);
+        }
+        const current = container.querySelectorAll("p")[paraIndex];
+        const text = letterParagraphs[paraIndex];
+        current.textContent = text.slice(0, charIndex + 1);
+        charIndex++;
+        if (charIndex < text.length) {
+          setTimeout(() => typeLetter(container), 22);
+        } else {
+          paraIndex++;
+          charIndex = 0;
+          setTimeout(() => typeLetter(container), 480);
+        }
+      }
+      function finishLetter() {
+        document.getElementById("polaroid-section").classList.remove("hidden");
+        document.getElementById("letter-next-btn").classList.remove("hidden");
+      }
 
-/* ════════════════════════════════
+      /* ════════════════════════════════
    STEP 3 — PROMISES
 ════════════════════════════════ */
-const promises = [
-  { icon:"👂", title:"Lebih mendengarkan",           body:"Aku janji untuk lebih banyak mendengar perasaanmu, bukan menunggu giliran bicara." },
-  { icon:"⏰", title:"Lebih menghargai waktumu",     body:"Setiap momen bersamamu adalah hadiah. Aku akan lebih hadir — bukan cuma secara fisik, tapi juga secara hati." },
-  { icon:"💬", title:"Lebih terbuka",                body:"Nggak akan lagi diam dan menjauh ketika masalah datang. Aku akan berbicara, bukan menutup diri." },
-  { icon:"🤝", title:"Menepati janjiku",             body:"Setiap kata yang aku ucapkan akan aku jaga. Karena kamu layak mendapatkan orang yang bisa dipegang janjinya." },
-  { icon:"💗", title:"Mencintaimu lebih baik setiap hari", body:"Cinta itu bukan hanya perasaan, tapi tindakan. Dan aku akan terus belajar cara mencintaimu dengan benar." },
-];
-function animatePromises() {
-  const list = document.getElementById('promise-list');
-  list.innerHTML = '';
-  promises.forEach((p, i) => {
-    const card = document.createElement('div');
-    card.className = 'promise-card';
-    card.innerHTML = `<div class="flex items-start gap-3">
+      const promises = [
+        {
+          icon: "👂",
+          title: "Lebih mendengarkan",
+          body: "Aku janji untuk lebih banyak mendengar perasaanmu, bukan menunggu giliran bicara.",
+        },
+        {
+          icon: "⏰",
+          title: "Lebih menghargai waktumu",
+          body: "Setiap momen bersamamu adalah hadiah. Aku akan lebih hadir — bukan cuma secara fisik, tapi juga secara hati.",
+        },
+        {
+          icon: "💬",
+          title: "Lebih terbuka",
+          body: "Nggak akan lagi diam dan menjauh ketika masalah datang. Aku akan berbicara, bukan menutup diri.",
+        },
+        {
+          icon: "🤝",
+          title: "Menepati janjiku",
+          body: "Setiap kata yang aku ucapkan akan aku jaga. Karena kamu layak mendapatkan orang yang bisa dipegang janjinya.",
+        },
+        {
+          icon: "💗",
+          title: "Mencintaimu lebih baik setiap hari",
+          body: "Cinta itu bukan hanya perasaan, tapi tindakan. Dan aku akan terus belajar cara mencintaimu dengan benar.",
+        },
+      ];
+      function animatePromises() {
+        const list = document.getElementById("promise-list");
+        list.innerHTML = "";
+        promises.forEach((p, i) => {
+          const card = document.createElement("div");
+          card.className = "promise-card";
+          card.innerHTML = `<div class="flex items-start gap-3">
       <span class="text-2xl">${p.icon}</span>
       <div>
         <p class="font-semibold text-sm mb-1" style="color:var(--deep)">${p.title}</p>
         <p class="text-xs leading-relaxed" style="color:var(--text)">${p.body}</p>
       </div></div>`;
-    list.appendChild(card);
-    setTimeout(() => card.classList.add('visible'), 300 + i * 200);
-  });
-}
+          list.appendChild(card);
+          setTimeout(() => card.classList.add("visible"), 300 + i * 200);
+        });
+      }
 
-/* ════════════════════════════════
+      /* ════════════════════════════════
    STEP 4 — RUNAWAY BUTTON
 ════════════════════════════════ */
-function initRunaway() {
-  const btn = document.getElementById('btn-no');
-  btn.style.top  = '75%';
-  btn.style.left = '65%';
-}
-function runaway(btn) {
-  const pad  = 60;
-  const bw   = btn.offsetWidth  || 120;
-  const bh   = btn.offsetHeight || 48;
-  const maxX = window.innerWidth  - bw - pad;
-  const maxY = window.innerHeight - bh - pad;
-  let newX, newY, attempts = 0;
-  do {
-    newX = pad + Math.random() * maxX;
-    newY = pad + Math.random() * maxY;
-    attempts++;
-  } while (
-    attempts < 20 &&
-    Math.abs(newX - window.innerWidth  / 2) < 130 &&
-    Math.abs(newY - window.innerHeight / 2) < 80
-  );
-  btn.style.left = newX + 'px';
-  btn.style.top  = newY + 'px';
-}
+      function initRunaway() {
+        const btn = document.getElementById("btn-no");
+        btn.style.top = "75%";
+        btn.style.left = "65%";
+      }
+      function runaway(btn) {
+        const pad = 60;
+        const bw = btn.offsetWidth || 120;
+        const bh = btn.offsetHeight || 48;
+        const maxX = window.innerWidth - bw - pad;
+        const maxY = window.innerHeight - bh - pad;
+        let newX,
+          newY,
+          attempts = 0;
+        do {
+          newX = pad + Math.random() * maxX;
+          newY = pad + Math.random() * maxY;
+          attempts++;
+        } while (
+          attempts < 20 &&
+          Math.abs(newX - window.innerWidth / 2) < 130 &&
+          Math.abs(newY - window.innerHeight / 2) < 80
+        );
+        btn.style.left = newX + "px";
+        btn.style.top = newY + "px";
+      }
 
-/* ════════════════════════════════
+      /* ════════════════════════════════
    STEP 5 — CELEBRATION
 ════════════════════════════════ */
-function celebrate() { goToStep(5); }
-function startCelebration() {
-  if (typeof confetti === 'undefined') return;
-  const colors = ['#F4A7B9','#FADADD','#C9956C','#E8D5F5','#ffffff','#f7cdd9'];
-  const burst = () => confetti({
-    particleCount: 80,
-    spread: 100,
-    origin: { x: Math.random(), y: 0.5 },
-    colors,
-    scalar: 1.2
-  });
-  burst();
-  setTimeout(burst, 300);
-  setTimeout(burst, 600);
-  setTimeout(() => {
-    confetti({ particleCount: 100, angle: 60, spread: 70, origin: { x: 0, y: 0.8 }, colors });
-    confetti({ particleCount: 100, angle: 120, spread: 70, origin: { x: 1, y: 0.8 }, colors });
-  }, 1000);
-}
+      function celebrate() {
+        goToStep(5);
+      }
+      function startCelebration() {
+        if (typeof confetti === "undefined") return;
+        const colors = [
+          "#F4A7B9",
+          "#FADADD",
+          "#C9956C",
+          "#E8D5F5",
+          "#ffffff",
+          "#f7cdd9",
+        ];
+        const burst = () =>
+          confetti({
+            particleCount: 80,
+            spread: 100,
+            origin: { x: Math.random(), y: 0.5 },
+            colors,
+            scalar: 1.2,
+          });
+        burst();
+        setTimeout(burst, 300);
+        setTimeout(burst, 600);
+        setTimeout(() => {
+          confetti({
+            particleCount: 100,
+            angle: 60,
+            spread: 70,
+            origin: { x: 0, y: 0.8 },
+            colors,
+          });
+          confetti({
+            particleCount: 100,
+            angle: 120,
+            spread: 70,
+            origin: { x: 1, y: 0.8 },
+            colors,
+          });
+        }, 1000);
+      }
 
-/* ════════════════════════════════
+      /* ════════════════════════════════
    FLOATING HEARTS
 ════════════════════════════════ */
-const layer  = document.getElementById('hearts-layer');
-const emojis = ['❤️','🌸','💕','💗','🌷','✨','💫','🩷'];
-function spawnHeart() {
-  const el  = document.createElement('span');
-  el.className = 'float-heart';
-  el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-  el.style.left = Math.random() * 100 + 'vw';
-  el.style.bottom = '-2rem';
-  el.style.fontSize = (.6 + Math.random() * .8) + 'rem';
-  const dur = 8 + Math.random() * 10;
-  el.style.animationDuration = dur + 's';
-  el.style.animationDelay = Math.random() * 4 + 's';
-  layer.appendChild(el);
-  setTimeout(() => el.remove(), (dur + 4) * 1000);
-}
-setInterval(spawnHeart, 1200);
-for (let i = 0; i < 6; i++) setTimeout(spawnHeart, i * 400);
+      const layer = document.getElementById("hearts-layer");
+      const emojis = ["❤️", "🌸", "💕", "💗", "🌷", "✨", "💫", "🩷"];
+      function spawnHeart() {
+        const el = document.createElement("span");
+        el.className = "float-heart";
+        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        el.style.left = Math.random() * 100 + "vw";
+        el.style.bottom = "-2rem";
+        el.style.fontSize = 0.6 + Math.random() * 0.8 + "rem";
+        const dur = 8 + Math.random() * 10;
+        el.style.animationDuration = dur + "s";
+        el.style.animationDelay = Math.random() * 4 + "s";
+        layer.appendChild(el);
+        setTimeout(() => el.remove(), (dur + 4) * 1000);
+      }
+      setInterval(spawnHeart, 1200);
+      for (let i = 0; i < 6; i++) setTimeout(spawnHeart, i * 400);
 
-/* ════════════════════════════════
+      /* ════════════════════════════════
    CURSOR SPARKLE
 ════════════════════════════════ */
-const sparkleEmojis = ['✨','💫','🌸','💕','⭐'];
-document.addEventListener('click', e => {
-  const s = document.createElement('span');
-  s.className = 'sparkle';
-  s.style.left = e.clientX + 'px';
-  s.style.top  = e.clientY + 'px';
-  s.textContent = sparkleEmojis[Math.floor(Math.random() * sparkleEmojis.length)];
-  document.body.appendChild(s);
-  setTimeout(() => s.remove(), 700);
-});
+      const sparkleEmojis = ["✨", "💫", "🌸", "💕", "⭐"];
+      document.addEventListener("click", (e) => {
+        const s = document.createElement("span");
+        s.className = "sparkle";
+        s.style.left = e.clientX + "px";
+        s.style.top = e.clientY + "px";
+        s.textContent =
+          sparkleEmojis[Math.floor(Math.random() * sparkleEmojis.length)];
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 700);
+      });
 
-/* ════════════════════════════════
+      /* ════════════════════════════════
    FADE-UP OBSERVER
 ════════════════════════════════ */
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.style.opacity = '1'; });
-}, { threshold: .2 });
-document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
-</script>
-</body>
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) e.target.style.opacity = "1";
+          });
+        },
+        { threshold: 0.2 },
+      );
+      document.querySelectorAll(".fade-up").forEach((el) => io.observe(el));
+    </script>
+  </body>
 </html>
