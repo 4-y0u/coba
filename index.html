@@ -31,7 +31,7 @@
     #music-trigger {
       position: fixed;
       bottom: 1.4rem;
-      right: 1.4rem;
+      left: 1.4rem;
       z-index: 90;
       width: 52px;
       height: 52px;
@@ -100,37 +100,46 @@
     /* ── Music Player Card ── */
     #player-card {
       position: fixed;
-      bottom: 5.2rem;
-      right: 1.4rem;
+      top: 50%;
+      left: 1.4rem;
+      transform: translateX(-20px) translateY(-50%) scale(.95);
       z-index: 91;
-      width: min(310px, calc(100vw - 2rem));
+      width: min(340px, calc(100vw - 2rem));
       background: white;
       border-radius: 24px;
       overflow: hidden;
       box-shadow: 0 16px 60px rgba(124,77,110,.22), 0 4px 16px rgba(124,77,110,.1);
       border: 1px solid rgba(244,167,185,.3);
-      transform: translateY(20px) scale(.95);
       opacity: 0;
       pointer-events: none;
       transition: transform .38s cubic-bezier(.34,1.28,.64,1), opacity .3s ease;
     }
     #player-card.open {
-      transform: translateY(0) scale(1);
+      transform: translateX(0) translateY(-50%) scale(1);
       opacity: 1;
       pointer-events: all;
     }
 
-    /* Album art */
+    /* Album art carousel */
     #player-art-wrap {
       position: relative;
       width: 100%;
       aspect-ratio: 1;
       overflow: hidden;
     }
-    #player-art-wrap img {
-      width: 100%; height: 100%;
+    /* Carousel strip */
+    #art-strip {
+      display: flex;
+      width: 400%;
+      height: 100%;
+      transition: transform .45s cubic-bezier(.4,0,.2,1);
+    }
+    #art-strip img {
+      width: 25%;
+      height: 100%;
       object-fit: cover;
       display: block;
+      flex-shrink: 0;
     }
     /* Gradient scrim on art */
     #player-art-wrap::after {
@@ -142,7 +151,49 @@
         rgba(0,0,0,.0) 55%,
         rgba(30,10,20,.55) 100%
       );
+      pointer-events: none;
     }
+    /* Carousel dot indicators */
+    #art-dots {
+      position: absolute;
+      bottom: .6rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      gap: 5px;
+      pointer-events: none;
+    }
+    .art-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.5);
+      transition: background .2s, transform .2s;
+    }
+    .art-dot.active {
+      background: white;
+      transform: scale(1.3);
+    }
+    /* Carousel nav arrows */
+    .art-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.22);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,.35);
+      color: white;
+      font-size: .75rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .art-nav:hover { background: rgba(255,255,255,.38); }
+    #art-prev { left: .5rem; }
+    #art-next { right: .5rem; }
     /* Close button */
     #player-close {
       position: absolute;
@@ -468,9 +519,24 @@
 ══════════════════════════════════════ -->
 <div id="player-card" role="region" aria-label="Music player">
 
-  <!-- Album art -->
+  <!-- Album art carousel -->
   <div id="player-art-wrap">
-    <img src="foto2.jpg" alt="Album art" id="player-art" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#fde8ed,#e8d5f5)'"/>
+    <div id="art-strip">
+      <img src="foto1.jpg" alt="Foto 1" onerror="this.style.background='linear-gradient(135deg,#fde8ed,#e8d5f5)';this.removeAttribute('src')"/>
+      <img src="foto2.jpg" alt="Foto 2" onerror="this.style.background='linear-gradient(135deg,#e8d5f5,#fde8ed)';this.removeAttribute('src')"/>
+      <img src="foto3.jpg" alt="Foto 3" onerror="this.style.background='linear-gradient(135deg,#fadadd,#f4a7b9)';this.removeAttribute('src')"/>
+      <img src="foto4.jpg" alt="Foto 4" onerror="this.style.background='linear-gradient(135deg,#f4a7b9,#c9956c)';this.removeAttribute('src')"/>
+    </div>
+    <!-- Nav arrows -->
+    <button class="art-nav" id="art-prev" onclick="artNav(-1)" aria-label="Previous photo">‹</button>
+    <button class="art-nav" id="art-next" onclick="artNav(1)"  aria-label="Next photo">›</button>
+    <!-- Dot indicators -->
+    <div id="art-dots">
+      <div class="art-dot active"></div>
+      <div class="art-dot"></div>
+      <div class="art-dot"></div>
+      <div class="art-dot"></div>
+    </div>
     <button id="player-close" onclick="closePlayerCard()" aria-label="Tutup player">✕</button>
     <!-- EQ bars -->
     <div id="player-eq">
@@ -591,6 +657,18 @@
               <img src="foto2.jpg" alt="Foto kita 2" class="w-full h-full object-cover">
             </div>
             <p class="text-xs mt-2 serif italic text-center" style="color:var(--deep)">Selalu ada tawa ♡</p>
+          </div>
+          <div class="polaroid flex flex-col items-center">
+            <div class="photo-slot w-full h-full overflow-hidden rounded">
+              <img src="foto3.jpg" alt="Foto kita 3" class="w-full h-full object-cover">
+            </div>
+            <p class="text-xs mt-2 serif italic text-center" style="color:var(--deep)">Waktu yang berharga ♡</p>
+          </div>
+          <div class="polaroid flex flex-col items-center">
+            <div class="photo-slot w-full h-full overflow-hidden rounded">
+              <img src="foto4.jpg" alt="Foto kita 4" class="w-full h-full object-cover">
+            </div>
+            <p class="text-xs mt-2 serif italic text-center" style="color:var(--deep)">Kamu segalanya ♡</p>
           </div>
         </div>
       </div>
@@ -841,6 +919,36 @@ function toggleLoop() {
 // Init loop state
 audio.loop = loopActive;
 document.getElementById('loop-btn').classList.add('active-toggle');
+
+/* ════════════════════════════════
+   ART CAROUSEL
+════════════════════════════════ */
+let artIndex = 0;
+const artTotal = 4;
+let artAutoTimer = null;
+
+function artNav(dir) {
+  artIndex = (artIndex + dir + artTotal) % artTotal;
+  updateArt();
+  resetArtAuto();
+}
+function updateArt() {
+  document.getElementById('art-strip').style.transform = `translateX(-${artIndex * 25}%)`;
+  document.querySelectorAll('.art-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === artIndex);
+  });
+}
+function startArtAuto() {
+  artAutoTimer = setInterval(() => {
+    artIndex = (artIndex + 1) % artTotal;
+    updateArt();
+  }, 3500);
+}
+function resetArtAuto() {
+  clearInterval(artAutoTimer);
+  startArtAuto();
+}
+startArtAuto();
 
 /* ════════════════════════════════
    STEP 2 — TYPEWRITER
